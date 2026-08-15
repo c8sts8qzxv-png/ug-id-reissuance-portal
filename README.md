@@ -1,0 +1,129 @@
+# SIRTS — Student ID Card Reissuance Tracking System
+
+A working front-end prototype of a portal for replacing a lost, stolen or damaged
+student ID card at the University of Ghana, Legon.
+
+Coursework prototype for **INFS 328 System Analysis & Design**, Department of
+Information Studies. It is not an official University service, and every name,
+record, receipt and figure in it is illustrative test data.
+
+**Live demo:** https://c8sts8qzxv-png.github.io/ug-id-reissuance-portal/
+
+---
+
+## The problem it addresses
+
+Replacing a student ID card at Legon is manual and paper-based. A student fills in a
+paper form, pays the fee, and hands the bundle over a counter, where it waits in a tray
+for manual verification and an irregular print batch.
+
+The delay students complain about is two problems, not one:
+
+- a **processing** delay — manual checks and batch printing, and
+- an **information** delay — no reference number, no status, no notification. The only
+  way to find out anything is to walk back to the office and ask.
+
+The second one is what this prototype is built around. Every screen is organised so
+that the current stage of a request, and the time it has been sitting there, is the
+first thing anyone sees.
+
+## What it does
+
+| Role | What they can do |
+| --- | --- |
+| **Student** | Submit a replacement request with a reason and a supporting document, pay the fee, get a reference number, watch the request move through five stages, read every message the system sent them, see request history |
+| **ID Card Officer** | Work an oldest-first queue, open a request, approve it or return it with a written reason, print a batch (which assigns card serials and produces a printable batch list), record collection at the counter |
+| **Administrator** | Average turnaround computed from real timestamps, backlog by stage, cards issued, fees processed, full audit trail of who did what and when, user accounts |
+
+The three roles share one data store, so the workflow is genuinely connected: approve a
+request as the officer, switch to the student, and the card has moved on.
+
+## Running it
+
+Any static file server, or just open `index.html` in a browser — there is no build step
+and no backend.
+
+```bash
+python3 -m http.server 8123
+```
+
+Then open http://localhost:8123.
+
+State lives in `localStorage` under the key `sirts.v5`. **Reset demo data** in the
+Administrator view restores the sample queue.
+
+## Suggested two-minute demo
+
+1. Open the front page — the hero card mints itself through the five stages.
+2. Sign in as **Student**: request a replacement card, choose "Lost card", pay. Watch the
+   reference number appear, then the payment confirmation land a moment later.
+3. Open **Messages sent** in the masthead — these are the SMS and e-mails the student
+   would have received. This is the feedback loop the counter process does not have.
+4. Switch to **ID Card Officer**: the new request is at the bottom of the queue. Open it,
+   check the document, approve it.
+5. Press **Print batch** — serials are assigned, the students are messaged, and a
+   printable batch list is produced.
+6. Switch back to **Student**: the card is now printed, with its serial, ready for
+   collection.
+7. Switch to **Administrator**: turnaround, backlog and the audit trail have all moved.
+
+## How it maps to the Phase 2 requirements
+
+| Requirement | Where it is |
+| --- | --- |
+| FR2 Submit request with reason | Student → *Request a replacement card* |
+| FR3 Upload supporting document | Same form; required for a lost or stolen card |
+| FR4 Unique reference number | Issued on submission, shown on every screen |
+| FR5 Verify fee payment | Simulated payment-platform confirmation after submission |
+| FR6 Approve or reject with a reason | Officer → detail panel; the reason is mandatory |
+| FR7 Print batch queue | Officer → *Print batch*, with a print stylesheet for the list |
+| FR8 Track request status | Student → five-stage rail with timestamps and elapsed time |
+| FR9 Notifications at every stage | *Messages sent* in the masthead |
+| FR10 Confirm collection | Officer → *Waiting at the counter* → *Record collection* |
+| FR11 Deactivate old card, record serial | On collection; serial assigned at printing |
+| FR12 Management reports | Administrator → turnaround, backlog, volumes |
+| FR13 Manage user accounts | Administrator → user accounts |
+| NFR6 Mobile-first, low bandwidth | No framework, no images; three stylesheets and three scripts |
+| NFR4 Audit trail | Administrator → audit trail |
+
+## What is real and what is simulated
+
+Real in this prototype:
+
+- the state machine and every stage transition
+- turnaround, backlog and volume figures, computed from the stored timestamps
+- the notification log and the audit trail, written as actions happen
+- persistence across reloads, and the printable batch list
+
+Simulated, because there is no backend:
+
+- payment confirmation, which arrives on a timer rather than from a payment platform
+- uploaded documents, whose filenames are kept but whose contents are not stored
+- authentication — the role switcher stands in for signing in
+- SMS and e-mail, which are written to the message log instead of being sent
+
+## Layout
+
+```
+index.html          front page: the problem, the five stages, and the way in
+app.html            the portal: student, officer and administrator views
+assets/css/base.css design tokens, shared components, the ID-card artifact
+assets/css/home.css front page
+assets/css/app.css  portal
+assets/js/store.js  seed data, state transitions, persistence, metrics
+assets/js/app.js    view rendering and interactions
+assets/js/home.js   the hero card animation
+```
+
+## Notes on the design
+
+The interface is built around the physical thing at the centre of the process: the card.
+It is drawn as a blueprint while the request is open, gains a gold foil seal when it is
+approved, and resolves to a printed card with a serial number when it is ready — so the
+progress of the request is legible before you read a single word.
+
+Typography is the IBM Plex superfamily in three roles: Sans Condensed for headings,
+Sans for interface text, and Mono for anything that behaves like a serial number —
+references, receipts, timestamps and card serials. The palette is drawn from a
+laminated card rather than a corporate dashboard: cool grey-blue ground, deep petrol
+blue ink, and gold used only on the card itself.

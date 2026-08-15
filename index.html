@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Student ID Card Reissuance — University of Ghana</title>
+<meta name="description" content="Report a lost, stolen or damaged University of Ghana student ID card, pay the reissuance fee, and follow the request through every stage until collection.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/home.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230C3B4E'/><text x='16' y='22' font-family='sans-serif' font-size='15' font-weight='700' fill='%23E3B75C' text-anchor='middle'>UG</text></svg>">
+</head>
+<body>
+
+<header class="mast mast--home">
+  <div class="wrap mast__in">
+    <a class="mast__id" href="index.html">
+      <span class="crest" aria-hidden="true">UG</span>
+      <span>
+        <span class="mast__name">University of Ghana</span>
+        <span class="mast__sub">Student ID Card Reissuance</span>
+      </span>
+    </a>
+    <a class="btn btn--sm" href="app.html?role=student">Sign in</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO: the card you are waiting for, drawn as it currently exists -->
+  <section class="hero">
+    <div class="wrap hero__grid">
+      <div>
+        <p class="eyebrow">Academic Affairs Directorate · ID Card Unit · Legon</p>
+        <h1>Know where your <em>ID card</em> is.</h1>
+        <p class="hero__lede">
+          Report a lost, stolen or damaged card, pay the reissuance fee and upload your
+          police report in one sitting. You get a reference number immediately and a
+          message at every stage — so you never have to walk to the office to ask.
+        </p>
+
+        <nav class="doors" aria-labelledby="doors-label">
+          <p class="eyebrow doors__label" id="doors-label">Open the portal as</p>
+          <div class="doors__list">
+            <a class="door" href="app.html?role=student">
+              <span class="door__key">STU</span>
+              <span>
+                <span class="door__name">Student</span>
+                <span class="door__what">Submit a request and follow it through</span>
+              </span>
+              <span class="door__go" aria-hidden="true">→</span>
+            </a>
+            <a class="door" href="app.html?role=officer">
+              <span class="door__key">OFF</span>
+              <span>
+                <span class="door__name">ID Card Officer</span>
+                <span class="door__what">Work the queue, approve, print the batch</span>
+              </span>
+              <span class="door__go" aria-hidden="true">→</span>
+            </a>
+            <a class="door" href="app.html?role=admin">
+              <span class="door__key">ADM</span>
+              <span>
+                <span class="door__name">Administrator</span>
+                <span class="door__what">Turnaround reports, accounts, audit trail</span>
+              </span>
+              <span class="door__go" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </nav>
+      </div>
+
+      <div class="hero__art">
+        <figure class="idcard" id="heroCard" data-state="blueprint">
+          <div class="idcard__face">
+            <div class="idcard__head">
+              <span class="idcard__crest" aria-hidden="true">UG</span>
+              <span class="idcard__org">
+                <b>University of Ghana</b>
+                <span>Student Identity Card</span>
+              </span>
+            </div>
+            <div class="idcard__body">
+              <div class="idcard__photo" aria-hidden="true">RA</div>
+              <dl class="idcard__lines">
+                <div>
+                  <dt>Name</dt>
+                  <dd>Reginald Ankrah</dd>
+                </div>
+                <div>
+                  <dt>Student number</dt>
+                  <dd class="sm mono">10928374 · BA Public Administration</dd>
+                </div>
+              </dl>
+            </div>
+            <div class="idcard__foot">
+              <span class="idcard__serial">
+                <small>Card serial</small>
+                <span id="heroSerial">▒▒▒▒ ▒▒▒▒ ▒▒▒▒</span>
+              </span>
+              <span class="idcard__seal" aria-hidden="true">UG</span>
+            </div>
+          </div>
+        </figure>
+        <p class="hero__caption" id="heroCaption">Stage 1 of 5 — <b>request submitted</b></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE FIVE STAGES -->
+  <section class="stages">
+    <div class="wrap">
+      <div class="stages__head">
+        <p class="eyebrow">How a replacement is processed</p>
+        <h2>Five stages, and you can see which one you are in.</h2>
+        <p>
+          The stages have not changed. What changed is that each one is recorded against
+          your reference number, timed, and sent to you as it happens.
+        </p>
+      </div>
+      <ol class="rail">
+        <li class="stage">
+          <span class="stage__dot">01</span>
+          <div>
+            <h3>Request submitted</h3>
+            <p>You state the reason and upload the police report or affidavit.</p>
+            <span class="stage__who">You</span>
+          </div>
+        </li>
+        <li class="stage">
+          <span class="stage__dot">02</span>
+          <div>
+            <h3>Payment verified</h3>
+            <p>The GH₵ 50 reissuance fee is matched against your reference.</p>
+            <span class="stage__who">Payment platform</span>
+          </div>
+        </li>
+        <li class="stage">
+          <span class="stage__dot">03</span>
+          <div>
+            <h3>Officer review</h3>
+            <p>Your record is checked and the request is approved or returned with a reason.</p>
+            <span class="stage__who">ID Card Unit</span>
+          </div>
+        </li>
+        <li class="stage">
+          <span class="stage__dot">04</span>
+          <div>
+            <h3>In the print batch</h3>
+            <p>Approved requests are queued and the card is printed with its serial.</p>
+            <span class="stage__who">ID Card Unit</span>
+          </div>
+        </li>
+        <li class="stage">
+          <span class="stage__dot">05</span>
+          <div>
+            <h3>Ready for collection</h3>
+            <p>You are told the day it is ready and you confirm receipt at the counter.</p>
+            <span class="stage__who">You</span>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- WHAT CHANGES -->
+  <section class="split">
+    <div class="wrap split__grid">
+      <div class="compare compare--old">
+        <p class="eyebrow">The counter process</p>
+        <h3>A form in a tray</h3>
+        <ul>
+          <li><i>—</i> A paper form is filed with no reference number attached to it.</li>
+          <li><i>—</i> Your record is checked by hand against a paper register.</li>
+          <li><i>—</i> Nothing is sent to you, at any stage.</li>
+          <li><i>—</i> The only way to check is to walk to the office and ask.</li>
+          <li><i>—</i> A misfiled form means starting the whole request again.</li>
+          <li><i>—</i> Nobody can say how long a replacement takes on average.</li>
+        </ul>
+      </div>
+      <div class="compare compare--new">
+        <p class="eyebrow eyebrow--gold">This portal</p>
+        <h3>A request you can follow</h3>
+        <ul>
+          <li><i>✓</i> A reference number is issued the moment you submit.</li>
+          <li><i>✓</i> Your record and your payment are matched automatically.</li>
+          <li><i>✓</i> An SMS and e-mail go out at every change of stage.</li>
+          <li><i>✓</i> The current stage is on your screen, with the date it was reached.</li>
+          <li><i>✓</i> Nothing can be misfiled — the request is the record.</li>
+          <li><i>✓</i> Turnaround and backlog are reported to the Registrar's office.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT YOU NEED -->
+  <section class="needs">
+    <div class="wrap">
+      <p class="eyebrow">Before you start</p>
+      <h2 style="font-size:clamp(24px,3.4vw,32px);margin-top:10px;">What you need to have ready.</h2>
+      <div class="needs__grid">
+        <article class="need">
+          <p class="eyebrow">Document</p>
+          <h3>Police report or affidavit</h3>
+          <p>
+            Required for a lost or stolen card. For a damaged card, bring the old card to
+            the counter when you collect the new one. PDF, PNG or JPG up to 5 MB.
+          </p>
+        </article>
+        <article class="need">
+          <p class="eyebrow">Fee</p>
+          <p class="fee">GH₵ 50.00</p>
+          <h3 style="margin-top:8px;">Paid by mobile money or bank card</h3>
+          <p>Paid through the University's existing payment platform. Keep the receipt reference.</p>
+        </article>
+        <article class="need">
+          <p class="eyebrow">Collection</p>
+          <h3>ID Card Unit, Legon</h3>
+          <p>
+            Registrar's Office Annex, Monday to Friday, 09:00–16:00. Bring one other form of
+            identification and your reference number.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <p>
+      <strong>SIRTS</strong> — Student ID Card Reissuance Tracking System. Coursework
+      prototype for INFS 328 System Analysis &amp; Design, Department of Information
+      Studies, University of Ghana. Not an official University service; all names, records
+      and figures shown are illustrative test data.
+    </p>
+    <p class="mono" style="font-size:12px;">Phase 4 prototype · SDLC phases 1–2 documented</p>
+  </div>
+</footer>
+
+<script src="assets/js/home.js"></script>
+</body>
+</html>

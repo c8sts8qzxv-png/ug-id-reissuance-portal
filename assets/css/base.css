@@ -1,0 +1,481 @@
+/* SIRTS — Student ID Card Reissuance Tracking System
+   Shared tokens, resets, typography and the ID-card artifact. */
+
+:root {
+  /* Ground: the cool sheen of a laminated card, not paper white */
+  --paper:        #E6EBEE;
+  --paper-deep:   #D5DDE2;
+  --surface:      #FFFFFF;
+  --surface-sunk: #F3F6F8;
+
+  --ink:          #0E1A21;
+  --ink-2:        #40525C;
+  --ink-3:        #6E828D;
+  --rule:         #CBD6DC;
+  --rule-soft:    #E1E8EC;
+
+  --legon:        #0C3B4E;   /* primary — deep petrol blue */
+  --legon-lift:   #145369;
+  --legon-wash:   #E4EEF2;
+
+  --gold:         #B8862B;   /* foil. used only on the card and the seal */
+  --gold-lift:    #E3B75C;
+
+  --wait:         #A2660A;
+  --wait-wash:    #FBF0DC;
+  --ok:           #0B6A50;
+  --ok-wash:      #DFF0EA;
+  --stop:         #97282A;
+  --stop-wash:    #FAE5E4;
+
+  --sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --cond: "IBM Plex Sans Condensed", "IBM Plex Sans", -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 12px;
+
+  --shadow-1: 0 1px 2px rgba(14, 26, 33, .06), 0 1px 1px rgba(14, 26, 33, .04);
+  --shadow-2: 0 2px 4px rgba(14, 26, 33, .05), 0 12px 28px -16px rgba(12, 59, 78, .35);
+  --shadow-3: 0 24px 60px -24px rgba(12, 59, 78, .45);
+
+  --wrap: 1140px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.55;
+  font-feature-settings: "kern" 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--cond);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.005em;
+  margin: 0;
+}
+
+p { margin: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+
+a { color: var(--legon); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:hover { color: var(--legon-lift); }
+
+:focus-visible {
+  outline: 2px solid var(--legon);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.wrap { width: 100%; max-width: var(--wrap); margin-inline: auto; padding-inline: 20px; }
+
+/* ---------- micro-labels: the registry vernacular ---------- */
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.eyebrow--gold { color: var(--gold); }
+
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+/* ---------- buttons ---------- */
+.btn {
+  --btn-bg: var(--legon);
+  --btn-fg: #fff;
+  --btn-bd: var(--legon);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 15px;
+  border: 1px solid var(--btn-bd);
+  border-radius: var(--r-sm);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font: 500 14px/1 var(--sans);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color .14s ease, border-color .14s ease, transform .14s ease;
+}
+.btn:hover { background: var(--legon-lift); border-color: var(--legon-lift); color: #fff; }
+.btn:active { transform: translateY(1px); }
+.btn[disabled] { opacity: .45; cursor: not-allowed; transform: none; }
+
+.btn--quiet { --btn-bg: transparent; --btn-fg: var(--legon); --btn-bd: var(--rule); }
+.btn--quiet:hover { background: var(--legon-wash); border-color: var(--legon); color: var(--legon); }
+
+.btn--go { --btn-bg: var(--ok); --btn-bd: var(--ok); }
+.btn--go:hover { background: #095641; border-color: #095641; }
+
+.btn--stop { --btn-bg: transparent; --btn-fg: var(--stop); --btn-bd: #E3BEBD; }
+.btn--stop:hover { background: var(--stop-wash); border-color: var(--stop); color: var(--stop); }
+
+.btn--sm { padding: 6px 11px; font-size: 13px; }
+
+/* ---------- status pills ---------- */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px 3px 7px;
+  border-radius: 999px;
+  font: 500 12px/1.5 var(--sans);
+  white-space: nowrap;
+}
+.pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.pill--wait { background: var(--wait-wash); color: var(--wait); }
+.pill--ok   { background: var(--ok-wash);   color: var(--ok); }
+.pill--stop { background: var(--stop-wash); color: var(--stop); }
+.pill--idle { background: var(--surface-sunk); color: var(--ink-2); }
+
+/* ---------- surfaces ---------- */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--rule-soft);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-1);
+}
+.panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.panel__head h2, .panel__head h3 { font-size: 16px; }
+.panel__body { padding: 18px; }
+
+/* ---------- masthead ---------- */
+.mast {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--legon);
+  color: #fff;
+  border-bottom: 3px solid var(--gold);
+}
+.mast__in {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 60px;
+}
+.mast__id { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; }
+.mast__id:hover { color: #fff; }
+.mast__name { display: block; font-family: var(--cond); font-size: 17px; font-weight: 600; line-height: 1.15; }
+.mast__sub {
+  display: block;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em;
+  text-transform: uppercase; color: #9FC2CE;
+}
+
+/* university monogram */
+.crest {
+  width: 34px; height: 38px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(160deg, var(--gold-lift), var(--gold));
+  clip-path: polygon(0 0, 100% 0, 100% 68%, 50% 100%, 0 68%);
+  font: 700 14px/1 var(--cond);
+  letter-spacing: .04em;
+  color: #2A1D05;
+}
+
+/* ---------- THE SIGNATURE: the card being minted ---------- */
+.idcard {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 85.6 / 54;
+  width: 100%;
+  max-width: 420px;
+  border-radius: var(--r-lg);
+  container-type: inline-size;
+}
+.idcard__face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 5.5% 6%;
+  border-radius: inherit;
+  overflow: hidden;
+  background: linear-gradient(152deg, #F7FAFB 0%, #E8F0F3 46%, #DCE8ED 100%);
+  border: 1px solid var(--rule);
+  box-shadow: var(--shadow-2);
+  transition: opacity .5s ease, filter .5s ease;
+}
+/* guilloché — the security print you find on a real card */
+.idcard__face::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  background:
+    repeating-radial-gradient(circle at 22% 118%, transparent 0 5px, rgba(12, 59, 78, .14) 5px 5.6px),
+    repeating-radial-gradient(circle at 88% -18%, transparent 0 7px, rgba(184, 134, 43, .14) 7px 7.7px);
+  opacity: .5;
+  pointer-events: none;
+}
+.idcard__face > * { position: relative; }
+
+.idcard__head {
+  display: flex;
+  align-items: center;
+  gap: 3.5%;
+  padding-bottom: 3%;
+  border-bottom: 1px solid rgba(12, 59, 78, .22);
+}
+.idcard__crest {
+  width: 8cqw; height: 9cqw;
+  background: linear-gradient(160deg, var(--gold-lift), var(--gold));
+  clip-path: polygon(0 0, 100% 0, 100% 68%, 50% 100%, 0 68%);
+  display: grid; place-items: center;
+  font: 700 3.4cqw/1 var(--cond); color: #2A1D05;
+}
+.idcard__org { line-height: 1.15; }
+.idcard__org b { display: block; font: 600 4.2cqw/1.1 var(--cond); color: var(--legon); letter-spacing: .01em; }
+.idcard__org span {
+  font: 500 2.5cqw/1.2 var(--mono);
+  letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3);
+}
+
+.idcard__body { display: grid; grid-template-columns: 22% 1fr; gap: 5%; align-items: center; }
+.idcard__photo {
+  aspect-ratio: 3 / 4;
+  border-radius: 2px;
+  background: linear-gradient(170deg, #C3D3DA, #9FB6C0);
+  display: grid; place-items: center;
+  font: 600 6cqw/1 var(--cond);
+  color: rgba(255, 255, 255, .92);
+  border: 1px solid rgba(12, 59, 78, .2);
+}
+.idcard__lines { display: grid; gap: 1.6cqw; min-width: 0; }
+.idcard__lines dt {
+  font: 500 2.3cqw/1 var(--mono);
+  letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3);
+}
+.idcard__lines dd {
+  margin: 0;
+  font: 600 4cqw/1.15 var(--cond);
+  color: var(--ink);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.idcard__lines dd.sm { font: 500 3cqw/1.2 var(--sans); color: var(--ink-2); }
+
+.idcard__foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 4%; }
+.idcard__serial {
+  font: 500 3cqw/1 var(--mono);
+  letter-spacing: .22em;
+  color: var(--legon);
+}
+.idcard__serial small {
+  display: block;
+  font-size: 2.2cqw; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--ink-3); margin-bottom: .6cqw;
+}
+/* gold foil seal — appears only once the card is approved */
+.idcard__seal {
+  width: 13cqw; height: 13cqw;
+  flex: none;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  background:
+    radial-gradient(circle at 34% 28%, rgba(255, 255, 255, .5), transparent 58%),
+    conic-gradient(from 210deg, #A87B25, #E7C36E 18%, #9C6F1E 36%, #F0D68F 54%,
+                   #A87B25 72%, #E0BB63 88%, #A87B25 100%);
+  color: #3A2807;
+  font: 700 3cqw/1 var(--cond);
+  letter-spacing: .04em;
+  box-shadow: inset 0 0 0 .7cqw rgba(255, 255, 255, .34), 0 1px 3px rgba(58, 40, 7, .4);
+  opacity: 0;
+  transform: scale(.6) rotate(-25deg);
+  transition: opacity .45s ease, transform .5s cubic-bezier(.2, .9, .3, 1.35);
+}
+
+/* --- state: not yet printed. a blueprint of the card that will exist --- */
+.idcard[data-state="blueprint"] .idcard__face {
+  background: repeating-linear-gradient(115deg, #EDF2F5 0 9px, #E7EDF1 9px 18px);
+  border-style: dashed;
+  border-color: #A9BEC8;
+  box-shadow: none;
+}
+.idcard[data-state="blueprint"] .idcard__face::before { opacity: .18; }
+.idcard[data-state="blueprint"] .idcard__photo {
+  background: transparent;
+  border: 1px dashed #A9BEC8;
+  color: transparent;
+}
+.idcard[data-state="blueprint"] .idcard__lines dd,
+.idcard[data-state="blueprint"] .idcard__org b,
+.idcard[data-state="blueprint"] .idcard__serial { color: #8AA3AF; }
+.idcard[data-state="blueprint"] .idcard__crest { filter: grayscale(1); opacity: .5; }
+
+/* --- state: approved and in the print batch --- */
+.idcard[data-state="printing"] .idcard__seal { opacity: .35; transform: scale(.92) rotate(-6deg); }
+.idcard[data-state="printing"] .idcard__face::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 35%, rgba(255, 255, 255, .78) 50%, transparent 65%);
+  animation: sweep 2.4s linear infinite;
+}
+
+/* --- state: issued. the card exists --- */
+.idcard[data-state="issued"] .idcard__seal { opacity: 1; transform: scale(1) rotate(0); }
+
+/* --- state: stopped --- */
+.idcard[data-state="void"] .idcard__face { filter: grayscale(.85); opacity: .55; }
+.idcard[data-state="void"]::after {
+  content: "REJECTED";
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(-11deg);
+  font: 700 clamp(20px, 7cqw, 40px)/1 var(--cond);
+  letter-spacing: .12em;
+  color: rgba(151, 40, 42, .72);
+  border: 3px solid rgba(151, 40, 42, .55);
+  border-radius: 4px;
+  padding: 6px 16px;
+}
+
+@keyframes sweep {
+  0%   { transform: translateX(-70%); }
+  100% { transform: translateX(70%); }
+}
+
+/* ---------- toast ---------- */
+.toasts {
+  position: fixed;
+  right: 16px; bottom: 16px;
+  z-index: 90;
+  display: grid;
+  gap: 8px;
+  width: min(340px, calc(100vw - 32px));
+}
+.toast {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--legon);
+  background: var(--surface);
+  box-shadow: var(--shadow-3);
+  font-size: 13.5px;
+  animation: rise .22s ease both;
+}
+.toast b { font-family: var(--cond); font-size: 14px; display: block; }
+.toast--ok   { border-left-color: var(--ok); }
+.toast--stop { border-left-color: var(--stop); }
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } }
+
+/* ---------- dialog ---------- */
+dialog.sheet {
+  width: min(560px, calc(100vw - 32px));
+  padding: 0;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-3);
+}
+dialog.sheet::backdrop { background: rgba(9, 32, 42, .55); }
+.sheet__head {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.sheet__head h2 { font-size: 18px; }
+.sheet__body { padding: 20px; display: grid; gap: 16px; }
+.sheet__foot {
+  display: flex; justify-content: flex-end; gap: 10px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--rule-soft);
+  background: var(--surface-sunk);
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
+}
+.x {
+  border: 0; background: transparent; cursor: pointer;
+  color: var(--ink-3); font-size: 20px; line-height: 1;
+  padding: 4px 6px; border-radius: var(--r-sm);
+}
+.x:hover { background: var(--surface-sunk); color: var(--ink); }
+
+/* ---------- forms ---------- */
+.field { display: grid; gap: 6px; }
+.field > label {
+  font: 500 11px/1.4 var(--mono);
+  letter-spacing: .13em; text-transform: uppercase; color: var(--ink-2);
+}
+.field .hint { font-size: 12.5px; color: var(--ink-3); }
+input[type="text"], input[type="file"], select, textarea {
+  width: 100%;
+  padding: 9px 11px;
+  font: 400 14px/1.4 var(--sans);
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-sm);
+}
+input[type="file"] { padding: 7px 9px; font-size: 13px; }
+textarea { resize: vertical; min-height: 78px; }
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid var(--legon);
+  outline-offset: 1px;
+  border-color: var(--legon);
+}
+.choice {
+  display: flex; align-items: center; gap: 9px;
+  padding: 10px 12px;
+  border: 1px solid var(--rule);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  font-size: 14px;
+}
+.choice:has(input:checked) { border-color: var(--legon); background: var(--legon-wash); }
+.choice input { accent-color: var(--legon); }
+
+.sr {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ---------- masthead on small screens ---------- */
+.bell__icon { display: none; }
+
+@media (max-width: 620px) {
+  .mast__in { min-height: 56px; gap: 8px; }
+  .mast__name { font-size: 15px; white-space: nowrap; }
+  /* the portal masthead carries a role switcher too, so the strapline gives way */
+  .mast:not(.mast--home) .mast__sub { display: none; }
+  .crest { width: 28px; height: 32px; font-size: 12px; }
+  .mast__id { gap: 9px; }
+  .mast__tools { gap: 6px; }
+  .bell { padding: 7px 9px; gap: 5px; }
+  .bell__label { display: none; }
+  .bell__icon { display: inline; font-size: 13px; }
+  .mast__tools select { padding: 7px 5px; font-size: 12px; max-width: 118px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}

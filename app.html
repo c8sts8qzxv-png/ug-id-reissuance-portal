@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portal — Student ID Card Reissuance | University of Ghana</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/app.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230C3B4E'/><text x='16' y='22' font-family='sans-serif' font-size='15' font-weight='700' fill='%23E3B75C' text-anchor='middle'>UG</text></svg>">
+</head>
+<body>
+
+<header class="mast">
+  <div class="wrap mast__in">
+    <a class="mast__id" href="index.html">
+      <span class="crest" aria-hidden="true">UG</span>
+      <span>
+        <span class="mast__name">University of Ghana</span>
+        <span class="mast__sub">ID Card Reissuance Portal</span>
+      </span>
+    </a>
+    <div class="mast__tools">
+      <button class="bell" id="bell" type="button">
+        <span class="bell__icon" aria-hidden="true">✉</span>
+        <span class="bell__label">Messages sent</span>
+        <b id="bellCount">0</b>
+      </button>
+      <label class="sr" for="roleSelect">Signed in as</label>
+      <select id="roleSelect">
+        <option value="student">Student</option>
+        <option value="officer">ID Card Officer</option>
+        <option value="admin">Administrator</option>
+      </select>
+    </div>
+  </div>
+</header>
+
+<div class="appbar">
+  <div class="wrap appbar__in">
+    <div class="who">
+      <span class="avatar" id="whoInitials">RA</span>
+      <div>
+        <h1 id="viewTitle">My replacement request</h1>
+        <p id="viewSub">Reginald Ankrah · 10928374</p>
+      </div>
+    </div>
+    <div id="appbarAction"></div>
+  </div>
+</div>
+
+<main class="app">
+  <div class="wrap">
+    <div id="view" class="stack"></div>
+  </div>
+</main>
+
+<!-- print-only batch list -->
+<section class="batchsheet" id="batchsheet" aria-hidden="true"></section>
+
+<!-- new request -->
+<dialog class="sheet" id="newRequest">
+  <form method="dialog" id="newRequestForm">
+    <div class="sheet__head">
+      <h2>Request a replacement card</h2>
+      <button class="x" type="button" data-close aria-label="Close">&times;</button>
+    </div>
+    <div class="sheet__body">
+      <div class="field">
+        <label for="reason">Reason for reissuance</label>
+        <select id="reason" required>
+          <option value="">Choose a reason</option>
+          <option value="lost">Lost card</option>
+          <option value="stolen">Stolen card</option>
+          <option value="damaged">Damaged card</option>
+          <option value="name_change">Correction / name change</option>
+        </select>
+      </div>
+      <div class="field" id="docField">
+        <label for="doc" id="docLabel">Police report or affidavit</label>
+        <input type="file" id="doc" accept=".pdf,.png,.jpg,.jpeg">
+        <p class="hint" id="docHint">PDF, PNG or JPG, up to 5 MB. Required for a lost or stolen card.</p>
+      </div>
+      <div class="field">
+        <label>Pay the GH₵ 50.00 fee with</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <label class="choice"><input type="radio" name="channel" value="Mobile money" checked> Mobile money</label>
+          <label class="choice"><input type="radio" name="channel" value="Bank card"> Bank card</label>
+        </div>
+        <p class="hint">You will be charged once. The payment platform confirms it against your reference number.</p>
+      </div>
+    </div>
+    <div class="sheet__foot">
+      <button class="btn btn--quiet" type="button" data-close>Cancel</button>
+      <button class="btn" type="submit">Pay and submit</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- return to student -->
+<dialog class="sheet" id="rejectDlg">
+  <form method="dialog" id="rejectForm">
+    <div class="sheet__head">
+      <h2>Return this request</h2>
+      <button class="x" type="button" data-close aria-label="Close">&times;</button>
+    </div>
+    <div class="sheet__body">
+      <p style="font-size:14px;color:var(--ink-2);" id="rejectWho"></p>
+      <div class="field">
+        <label for="rejectReason">What the student must fix</label>
+        <textarea id="rejectReason" required placeholder="e.g. The police report is not legible. Upload a clear scan of the full page."></textarea>
+        <p class="hint">This text is sent to the student, so write it as an instruction.</p>
+      </div>
+    </div>
+    <div class="sheet__foot">
+      <button class="btn btn--quiet" type="button" data-close>Cancel</button>
+      <button class="btn btn--stop" type="submit">Return with reason</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- document viewer stand-in -->
+<dialog class="sheet" id="docDlg">
+  <div class="sheet__head">
+    <h2>Supporting document</h2>
+    <button class="x" type="button" data-close aria-label="Close">&times;</button>
+  </div>
+  <div class="sheet__body">
+    <p class="mono" style="font-size:13px;" id="docName"></p>
+    <div style="aspect-ratio:210/297;background:var(--surface-sunk);border:1px dashed var(--rule);border-radius:var(--r-sm);display:grid;place-items:center;text-align:center;padding:20px;">
+      <p style="font-size:13.5px;color:var(--ink-3);max-width:34ch;">
+        Uploaded files are not stored in this prototype. In the built system the scan
+        opens here for the officer to check against the student record.
+      </p>
+    </div>
+  </div>
+  <div class="sheet__foot">
+    <button class="btn btn--quiet" type="button" data-close>Close</button>
+  </div>
+</dialog>
+
+<!-- notification log -->
+<dialog class="sheet" id="notesDlg">
+  <div class="sheet__head">
+    <h2>Messages sent to students</h2>
+    <button class="x" type="button" data-close aria-label="Close">&times;</button>
+  </div>
+  <div class="notes" id="notesList"></div>
+  <div class="sheet__foot">
+    <button class="btn btn--quiet" type="button" data-close>Close</button>
+  </div>
+</dialog>
+
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+<script src="assets/js/store.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
