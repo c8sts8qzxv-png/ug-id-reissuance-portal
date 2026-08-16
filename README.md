@@ -102,6 +102,31 @@ Simulated, because there is no backend:
 - authentication — the role switcher stands in for signing in
 - SMS and e-mail, which are written to the message log instead of being sent
 
+## Hosting
+
+It is already hosted, free, at the link above. GitHub Pages serves it from a public URL
+over HTTPS, so it opens on **any device, on any network** — a phone on mobile data, a
+lecture-hall projector, the examiner's own laptop. Nothing needs to be installed and the
+machine that built it does not need to be switched on. There is no expiry and no card on
+file; free Pages is unmetered for normal use, with a soft limit of 100 GB of traffic a
+month and 10 builds an hour, neither of which a site this size will approach.
+
+Every push to `main` republishes it within about a minute.
+
+If you ever want to move it, the site is plain static files, so any of these will serve
+it unchanged and for free:
+
+| Host | Free tier | Worth knowing |
+| --- | --- | --- |
+| **GitHub Pages** (current) | Unlimited public sites | Deploys straight from the repo; no separate account |
+| **Cloudflare Pages** | Unlimited sites and bandwidth | Fastest in Ghana — Cloudflare has an Accra edge; connect the repo and set the build output to `/` |
+| **Netlify** | 100 GB/month | Deploy previews per branch; drag-and-drop upload also works |
+| **Vercel** | 100 GB/month | Same idea; overkill for a static site |
+| **Surge.sh** | Unlimited | One command, `surge .` — no account linking, no repo needed |
+
+All of them accept a custom domain later (`sirts.example.gh`) if the Department ever
+wanted one.
+
 ## Layout
 
 ```

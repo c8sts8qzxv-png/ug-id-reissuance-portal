@@ -16,10 +16,22 @@
     { state: 'issued', n: 5, label: 'ready for collection', serial: SERIAL }
   ];
 
+  var issueEl = document.getElementById('heroIssue');
+  var expiryEl = document.getElementById('heroExpiry');
+
+  function stampDates() {
+    var d = new Date();
+    var iss = d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear();
+    var exp = '31/10/' + (d.getFullYear() + 3);
+    if (issueEl) issueEl.textContent = iss;
+    if (expiryEl) expiryEl.textContent = exp;
+  }
+
   function paint(step) {
     card.dataset.state = step.state;
     caption.innerHTML = 'Stage ' + step.n + ' of 5 — <b>' + step.label + '</b>';
     if (step.serial !== null) serialEl.textContent = step.serial;
+    if (step.state === 'issued') stampDates();
   }
 
   var still = window.matchMedia('(prefers-reduced-motion: reduce)');

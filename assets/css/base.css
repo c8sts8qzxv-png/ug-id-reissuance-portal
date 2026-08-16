@@ -9,8 +9,8 @@
   --surface-sunk: #F3F6F8;
 
   --ink:          #0E1A21;
-  --ink-2:        #40525C;
-  --ink-3:        #6E828D;
+  --ink-2:        #3B4D57;
+  --ink-3:        #5A6C77;   /* 4.9:1 on white — safe for small secondary text */
   --rule:         #CBD6DC;
   --rule-soft:    #E1E8EC;
 
@@ -20,6 +20,11 @@
 
   --gold:         #B8862B;   /* foil. used only on the card and the seal */
   --gold-lift:    #E3B75C;
+  --gold-text:    #7E5A12;   /* 5.2:1 on white — the gold that is safe to read */
+
+  /* the built-in curves are too weak to feel deliberate */
+  --ease-out:     cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out:  cubic-bezier(0.77, 0, 0.175, 1);
 
   --wait:         #A2660A;
   --wait-wash:    #FBF0DC;
@@ -89,7 +94,7 @@ a:hover { color: var(--legon-lift); }
   text-transform: uppercase;
   color: var(--ink-3);
 }
-.eyebrow--gold { color: var(--gold); }
+.eyebrow--gold { color: var(--gold-text); }
 
 .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
 
@@ -106,25 +111,28 @@ a:hover { color: var(--legon-lift); }
   border-radius: var(--r-sm);
   background: var(--btn-bg);
   color: var(--btn-fg);
+  min-height: 38px;
   font: 500 14px/1 var(--sans);
   cursor: pointer;
   text-decoration: none;
-  transition: background-color .14s ease, border-color .14s ease, transform .14s ease;
+  transition: background-color 140ms ease, border-color 140ms ease,
+              transform 160ms var(--ease-out);
 }
-.btn:hover { background: var(--legon-lift); border-color: var(--legon-lift); color: #fff; }
-.btn:active { transform: translateY(1px); }
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover { background: var(--legon-lift); border-color: var(--legon-lift); color: #fff; }
+  .btn--quiet:hover { background: var(--legon-wash); border-color: var(--legon); color: var(--legon); }
+  .btn--go:hover { background: #095641; border-color: #095641; }
+  .btn--stop:hover { background: var(--stop-wash); border-color: var(--stop); color: var(--stop); }
+}
+/* the press has to be felt, not just registered */
+.btn:active { transform: scale(0.97); }
 .btn[disabled] { opacity: .45; cursor: not-allowed; transform: none; }
 
 .btn--quiet { --btn-bg: transparent; --btn-fg: var(--legon); --btn-bd: var(--rule); }
-.btn--quiet:hover { background: var(--legon-wash); border-color: var(--legon); color: var(--legon); }
-
 .btn--go { --btn-bg: var(--ok); --btn-bd: var(--ok); }
-.btn--go:hover { background: #095641; border-color: #095641; }
-
 .btn--stop { --btn-bg: transparent; --btn-fg: var(--stop); --btn-bd: #E3BEBD; }
-.btn--stop:hover { background: var(--stop-wash); border-color: var(--stop); color: var(--stop); }
 
-.btn--sm { padding: 6px 11px; font-size: 13px; }
+.btn--sm { padding: 6px 11px; min-height: 32px; font-size: 13px; }
 
 /* ---------- status pills ---------- */
 .pill {
@@ -198,13 +206,16 @@ a:hover { color: var(--legon-lift); }
   color: #2A1D05;
 }
 
-/* ---------- THE SIGNATURE: the card being minted ---------- */
+/* ---------- THE SIGNATURE: the card being minted ----------
+   Layout follows a real University of Ghana student ID: crest and wordmark top
+   left, gold "STUDENT ID CARD" banner top right, portrait left, field stack
+   right, student number and name across the foot. Data is fictional. */
 .idcard {
   position: relative;
   margin: 0;
   aspect-ratio: 85.6 / 54;
   width: 100%;
-  max-width: 420px;
+  max-width: 430px;
   border-radius: var(--r-lg);
   container-type: inline-size;
 }
@@ -213,86 +224,114 @@ a:hover { color: var(--legon-lift); }
   inset: 0;
   display: grid;
   grid-template-rows: auto 1fr auto;
-  padding: 5.5% 6%;
+  gap: 2.4cqw;
+  padding: 4.6% 5.2%;
   border-radius: inherit;
   overflow: hidden;
-  background: linear-gradient(152deg, #F7FAFB 0%, #E8F0F3 46%, #DCE8ED 100%);
+  background:
+    linear-gradient(150deg, #F7FAFC 0%, #E9F1F5 48%, #DCE8EE 100%);
   border: 1px solid var(--rule);
   box-shadow: var(--shadow-2);
-  transition: opacity .5s ease, filter .5s ease;
+  transition: opacity 400ms var(--ease-out), filter 400ms var(--ease-out);
 }
-/* guilloché — the security print you find on a real card */
+/* guilloché — the wave-and-lathe security print a real card carries */
 .idcard__face::before {
   content: "";
   position: absolute;
-  inset: -30%;
+  inset: -40%;
   background:
-    repeating-radial-gradient(circle at 22% 118%, transparent 0 5px, rgba(12, 59, 78, .14) 5px 5.6px),
-    repeating-radial-gradient(circle at 88% -18%, transparent 0 7px, rgba(184, 134, 43, .14) 7px 7.7px);
-  opacity: .5;
+    repeating-radial-gradient(ellipse 62% 30% at 18% 62%,
+      transparent 0 6px, rgba(24, 74, 128, .16) 6px 6.7px),
+    repeating-radial-gradient(ellipse 70% 26% at 86% 30%,
+      transparent 0 8px, rgba(24, 74, 128, .11) 8px 8.8px);
+  opacity: .55;
   pointer-events: none;
 }
 .idcard__face > * { position: relative; }
 
-.idcard__head {
-  display: flex;
-  align-items: center;
-  gap: 3.5%;
-  padding-bottom: 3%;
-  border-bottom: 1px solid rgba(12, 59, 78, .22);
-}
+/* --- top band --- */
+.idcard__top { display: flex; align-items: flex-start; gap: 2.6cqw; }
 .idcard__crest {
-  width: 8cqw; height: 9cqw;
+  width: 7.4cqw; height: 8.6cqw;
+  flex: none;
   background: linear-gradient(160deg, var(--gold-lift), var(--gold));
-  clip-path: polygon(0 0, 100% 0, 100% 68%, 50% 100%, 0 68%);
+  clip-path: polygon(0 0, 100% 0, 100% 66%, 50% 100%, 0 66%);
   display: grid; place-items: center;
-  font: 700 3.4cqw/1 var(--cond); color: #2A1D05;
+  font: 700 3cqw/1 var(--cond); color: #2A1D05;
 }
-.idcard__org { line-height: 1.15; }
-.idcard__org b { display: block; font: 600 4.2cqw/1.1 var(--cond); color: var(--legon); letter-spacing: .01em; }
-.idcard__org span {
-  font: 500 2.5cqw/1.2 var(--mono);
-  letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3);
+.idcard__word {
+  font: 700 4.6cqw/1.02 var(--cond);
+  letter-spacing: .005em;
+  color: #16222B;
+  text-transform: uppercase;
+  margin-top: .2cqw;
+}
+.idcard__banner {
+  margin-left: auto;
+  padding: 1cqw 2.4cqw;
+  background: linear-gradient(100deg, #8E6415, #D8B15E 45%, #9C7020);
+  color: #FFF8E6;
+  font: 700 2.9cqw/1.25 var(--cond);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
-.idcard__body { display: grid; grid-template-columns: 22% 1fr; gap: 5%; align-items: center; }
+/* --- body --- */
+.idcard__body { display: grid; grid-template-columns: 21% 1fr; gap: 4%; align-items: start; }
 .idcard__photo {
   aspect-ratio: 3 / 4;
-  border-radius: 2px;
-  background: linear-gradient(170deg, #C3D3DA, #9FB6C0);
+  border-radius: 1px;
+  background: linear-gradient(170deg, #BACBD4, #93AAB6);
   display: grid; place-items: center;
-  font: 600 6cqw/1 var(--cond);
-  color: rgba(255, 255, 255, .92);
-  border: 1px solid rgba(12, 59, 78, .2);
+  font: 600 5.4cqw/1 var(--cond);
+  color: rgba(255, 255, 255, .94);
+  border: 1px solid rgba(12, 59, 78, .22);
 }
-.idcard__lines { display: grid; gap: 1.6cqw; min-width: 0; }
-.idcard__lines dt {
-  font: 500 2.3cqw/1 var(--mono);
-  letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3);
+.idcard__fields { display: grid; gap: 1.4cqw; min-width: 0; margin: 0; }
+.idcard__fields dt {
+  font: 500 2.2cqw/1 var(--mono);
+  letter-spacing: .1em; text-transform: uppercase; color: #566A76;
 }
-.idcard__lines dd {
-  margin: 0;
-  font: 600 4cqw/1.15 var(--cond);
-  color: var(--ink);
+.idcard__fields dd {
+  margin: .5cqw 0 0;
+  font: 600 3.1cqw/1.12 var(--cond);
+  text-transform: uppercase;
+  color: #16222B;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
-.idcard__lines dd.sm { font: 500 3cqw/1.2 var(--sans); color: var(--ink-2); }
+.idcard__pair { display: grid; grid-template-columns: 1fr 1fr; gap: 3%; }
 
-.idcard__foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 4%; }
+/* --- foot --- */
+.idcard__foot { display: grid; gap: 1cqw; }
+/* the foot keeps clear of the seal struck into the bottom-right corner */
+.idcard__line {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 3%; padding-right: 15%;
+}
+.idcard__no {
+  font: 700 4cqw/1 var(--cond);
+  letter-spacing: .02em;
+  color: #16222B;
+}
+.idcard__name {
+  font: 700 3.8cqw/1 var(--cond);
+  text-transform: uppercase;
+  color: #16222B;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
 .idcard__serial {
-  font: 500 3cqw/1 var(--mono);
-  letter-spacing: .22em;
-  color: var(--legon);
+  font: 500 2.3cqw/1 var(--mono);
+  letter-spacing: .2em;
+  color: #46606E;
 }
-.idcard__serial small {
-  display: block;
-  font-size: 2.2cqw; letter-spacing: .16em; text-transform: uppercase;
-  color: var(--ink-3); margin-bottom: .6cqw;
-}
-/* gold foil seal — appears only once the card is approved */
+.idcard__serial b { font-weight: 500; color: var(--legon); }
+
+/* gold foil seal — struck onto the card only once it is approved */
 .idcard__seal {
-  width: 13cqw; height: 13cqw;
-  flex: none;
+  position: absolute;
+  right: 5.2%; bottom: 13%;
+  width: 12cqw; height: 12cqw;
   border-radius: 50%;
   display: grid; place-items: center;
   background:
@@ -300,40 +339,46 @@ a:hover { color: var(--legon-lift); }
     conic-gradient(from 210deg, #A87B25, #E7C36E 18%, #9C6F1E 36%, #F0D68F 54%,
                    #A87B25 72%, #E0BB63 88%, #A87B25 100%);
   color: #3A2807;
-  font: 700 3cqw/1 var(--cond);
+  font: 700 2.8cqw/1 var(--cond);
   letter-spacing: .04em;
   box-shadow: inset 0 0 0 .7cqw rgba(255, 255, 255, .34), 0 1px 3px rgba(58, 40, 7, .4);
   opacity: 0;
-  transform: scale(.6) rotate(-25deg);
-  transition: opacity .45s ease, transform .5s cubic-bezier(.2, .9, .3, 1.35);
+  transform: scale(.92) rotate(-14deg);
+  transition: opacity 260ms var(--ease-out), transform 320ms var(--ease-out);
 }
 
 /* --- state: not yet printed. a blueprint of the card that will exist --- */
 .idcard[data-state="blueprint"] .idcard__face {
-  background: repeating-linear-gradient(115deg, #EDF2F5 0 9px, #E7EDF1 9px 18px);
+  background: repeating-linear-gradient(115deg, #EEF3F6 0 9px, #E8EEF2 9px 18px);
   border-style: dashed;
   border-color: #A9BEC8;
   box-shadow: none;
 }
-.idcard[data-state="blueprint"] .idcard__face::before { opacity: .18; }
+.idcard[data-state="blueprint"] .idcard__face::before { opacity: .16; }
 .idcard[data-state="blueprint"] .idcard__photo {
   background: transparent;
   border: 1px dashed #A9BEC8;
   color: transparent;
 }
-.idcard[data-state="blueprint"] .idcard__lines dd,
-.idcard[data-state="blueprint"] .idcard__org b,
-.idcard[data-state="blueprint"] .idcard__serial { color: #8AA3AF; }
-.idcard[data-state="blueprint"] .idcard__crest { filter: grayscale(1); opacity: .5; }
+.idcard[data-state="blueprint"] .idcard__word,
+.idcard[data-state="blueprint"] .idcard__fields dd,
+.idcard[data-state="blueprint"] .idcard__no,
+.idcard[data-state="blueprint"] .idcard__name { color: #8CA4B0; }
+.idcard[data-state="blueprint"] .idcard__banner {
+  background: none;
+  border: 1px dashed #A9BEC8;
+  color: #8CA4B0;
+}
+.idcard[data-state="blueprint"] .idcard__crest { filter: grayscale(1); opacity: .45; }
 
 /* --- state: approved and in the print batch --- */
-.idcard[data-state="printing"] .idcard__seal { opacity: .35; transform: scale(.92) rotate(-6deg); }
+.idcard[data-state="printing"] .idcard__seal { opacity: .4; transform: scale(.96) rotate(-5deg); }
 .idcard[data-state="printing"] .idcard__face::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(100deg, transparent 35%, rgba(255, 255, 255, .78) 50%, transparent 65%);
-  animation: sweep 2.4s linear infinite;
+  background: linear-gradient(100deg, transparent 36%, rgba(255, 255, 255, .72) 50%, transparent 64%);
+  animation: sweep 2.6s linear infinite;
 }
 
 /* --- state: issued. the card exists --- */
@@ -342,17 +387,18 @@ a:hover { color: var(--legon-lift); }
 /* --- state: stopped --- */
 .idcard[data-state="void"] .idcard__face { filter: grayscale(.85); opacity: .55; }
 .idcard[data-state="void"]::after {
-  content: "REJECTED";
+  content: "RETURNED";
   position: absolute;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%) rotate(-11deg);
-  font: 700 clamp(20px, 7cqw, 40px)/1 var(--cond);
+  font: 700 clamp(18px, 6.5cqw, 38px)/1 var(--cond);
   letter-spacing: .12em;
   color: rgba(151, 40, 42, .72);
   border: 3px solid rgba(151, 40, 42, .55);
   border-radius: 4px;
   padding: 6px 16px;
 }
+
 
 @keyframes sweep {
   0%   { transform: translateX(-70%); }
@@ -368,6 +414,7 @@ a:hover { color: var(--legon-lift); }
   gap: 8px;
   width: min(340px, calc(100vw - 32px));
 }
+/* transitions, not keyframes: toasts arrive in bursts and must retarget cleanly */
 .toast {
   display: flex; gap: 10px; align-items: flex-start;
   padding: 12px 14px;
@@ -377,12 +424,22 @@ a:hover { color: var(--legon-lift); }
   background: var(--surface);
   box-shadow: var(--shadow-3);
   font-size: 13.5px;
-  animation: rise .22s ease both;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: opacity 240ms var(--ease-out), transform 240ms var(--ease-out);
+}
+@starting-style {
+  .toast { opacity: 0; transform: translateY(14px) scale(.98); }
+}
+/* leaving is the system responding, so it is quicker than arriving */
+.toast[data-leaving] {
+  opacity: 0;
+  transform: translateY(4px) scale(.98);
+  transition-duration: 150ms;
 }
 .toast b { font-family: var(--cond); font-size: 14px; display: block; }
 .toast--ok   { border-left-color: var(--ok); }
 .toast--stop { border-left-color: var(--stop); }
-@keyframes rise { from { opacity: 0; transform: translateY(8px); } }
 
 /* ---------- dialog ---------- */
 dialog.sheet {
@@ -393,8 +450,25 @@ dialog.sheet {
   background: var(--surface);
   color: var(--ink);
   box-shadow: var(--shadow-3);
+  /* a modal is not anchored to a trigger, so it scales from its own centre */
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out),
+              overlay 200ms allow-discrete, display 200ms allow-discrete;
 }
-dialog.sheet::backdrop { background: rgba(9, 32, 42, .55); }
+dialog.sheet:not([open]) { opacity: 0; transform: scale(.96); }
+@starting-style {
+  dialog.sheet[open] { opacity: 0; transform: scale(.96); }
+}
+dialog.sheet::backdrop {
+  background: rgba(9, 32, 42, .55);
+  opacity: 1;
+  transition: opacity 200ms ease, overlay 200ms allow-discrete, display 200ms allow-discrete;
+}
+dialog.sheet:not([open])::backdrop { opacity: 0; }
+@starting-style {
+  dialog.sheet[open]::backdrop { opacity: 0; }
+}
 .sheet__head {
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
   padding: 16px 20px;

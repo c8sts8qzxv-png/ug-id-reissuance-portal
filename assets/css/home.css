@@ -54,15 +54,20 @@
   border-radius: var(--r-md);
   text-decoration: none;
   color: inherit;
+  min-height: 48px;
   box-shadow: var(--shadow-1);
-  transition: border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+  transition: border-color 150ms ease, transform 160ms var(--ease-out),
+              box-shadow 150ms ease;
 }
-.door:hover {
-  border-color: var(--legon);
-  transform: translateX(3px);
-  box-shadow: var(--shadow-2);
-  color: inherit;
+@media (hover: hover) and (pointer: fine) {
+  .door:hover {
+    border-color: var(--legon);
+    transform: translateX(3px);
+    box-shadow: var(--shadow-2);
+    color: inherit;
+  }
 }
+.door:active { transform: scale(0.985); }
 .door__key {
   font-family: var(--mono); font-size: 11px; letter-spacing: .1em;
   color: var(--gold); border: 1px solid #E6D6B4; background: #FBF6EA;

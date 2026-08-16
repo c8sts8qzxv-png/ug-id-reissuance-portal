@@ -173,6 +173,12 @@ window.SIRTS = (function () {
   function active() {
     return mine().filter(function (r) { return r.stage !== 'collected'; })[0] || null;
   }
+  /* still in the pipeline. a returned request is finished — the student resubmits. */
+  function openRequest() {
+    return mine().filter(function (r) {
+      return r.stage !== 'collected' && r.stage !== 'rejected';
+    })[0] || null;
+  }
   function byRef(ref) {
     return state.requests.filter(function (r) { return r.ref === ref; })[0] || null;
   }
@@ -234,6 +240,7 @@ window.SIRTS = (function () {
   }
 
   function create(input) {
+    if (openRequest()) return null;   // one replacement in flight at a time
     var year = new Date().getFullYear();
     var used = state.requests.map(function (r) { return r.ref; });
     var n = 89;
@@ -314,7 +321,8 @@ window.SIRTS = (function () {
   return {
     STAGES: STAGES, REASONS: REASONS, ME: ME, FEE: FEE,
     stageIndex: stageIndex, labelOf: labelOf, eventAt: eventAt,
-    all: all, mine: mine, active: active, byRef: byRef, queue: queue, batch: batch, at: at,
+    all: all, mine: mine, active: active, openRequest: openRequest,
+    byRef: byRef, queue: queue, batch: batch, at: at,
     metrics: metrics,
     notifications: function () { return state.notifications; },
     audit: function () { return state.audit; },

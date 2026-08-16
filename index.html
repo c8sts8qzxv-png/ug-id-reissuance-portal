@@ -75,33 +75,42 @@
       <div class="hero__art">
         <figure class="idcard" id="heroCard" data-state="blueprint">
           <div class="idcard__face">
-            <div class="idcard__head">
+            <div class="idcard__top">
               <span class="idcard__crest" aria-hidden="true">UG</span>
-              <span class="idcard__org">
-                <b>University of Ghana</b>
-                <span>Student Identity Card</span>
-              </span>
+              <span class="idcard__word">University<br>of Ghana</span>
+              <span class="idcard__banner">Student ID Card</span>
             </div>
             <div class="idcard__body">
               <div class="idcard__photo" aria-hidden="true">RA</div>
-              <dl class="idcard__lines">
+              <dl class="idcard__fields">
                 <div>
-                  <dt>Name</dt>
-                  <dd>Reginald Ankrah</dd>
+                  <dt>Program</dt>
+                  <dd>Bachelor of Arts (Public Administration)</dd>
                 </div>
                 <div>
-                  <dt>Student number</dt>
-                  <dd class="sm mono">10928374 · BA Public Administration</dd>
+                  <dt>Campus</dt>
+                  <dd>Main campus: full-time</dd>
+                </div>
+                <div class="idcard__pair">
+                  <div>
+                    <dt>Date of issue</dt>
+                    <dd id="heroIssue">—</dd>
+                  </div>
+                  <div>
+                    <dt>Expiry date</dt>
+                    <dd id="heroExpiry">—</dd>
+                  </div>
                 </div>
               </dl>
             </div>
             <div class="idcard__foot">
-              <span class="idcard__serial">
-                <small>Card serial</small>
-                <span id="heroSerial">▒▒▒▒ ▒▒▒▒ ▒▒▒▒</span>
+              <span class="idcard__line">
+                <span class="idcard__no">10928374</span>
+                <span class="idcard__name">Ankrah, Reginald</span>
               </span>
-              <span class="idcard__seal" aria-hidden="true">UG</span>
+              <span class="idcard__serial">Serial <b id="heroSerial">▒▒▒▒ ▒▒▒▒ ▒▒▒▒</b></span>
             </div>
+            <span class="idcard__seal" aria-hidden="true">UG</span>
           </div>
         </figure>
         <p class="hero__caption" id="heroCaption">Stage 1 of 5 — <b>request submitted</b></p>

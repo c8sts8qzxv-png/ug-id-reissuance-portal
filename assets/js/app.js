@@ -26,6 +26,10 @@
     var d = new Date(ts);
     return d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear();
   }
+  function shortDate(ts) {
+    var d = new Date(ts);
+    return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear();
+  }
   function dur(ms) {
     var m = Math.max(0, Math.round(ms / 60000));
     if (m < 60) return m + ' min';
@@ -43,10 +47,9 @@
     t.innerHTML = '<div><b>' + esc(title) + '</b>' + (body ? esc(body) : '') + '</div>';
     box.appendChild(t);
     setTimeout(function () {
-      t.style.transition = 'opacity .25s ease';
-      t.style.opacity = '0';
-      setTimeout(function () { t.remove(); }, 260);
-    }, 4200);
+      t.setAttribute('data-leaving', '');
+      setTimeout(function () { t.remove(); }, 170);
+    }, 5000);
   }
 
   function cardState(stage) {
@@ -64,28 +67,45 @@
     return '<span class="pill pill--idle">' + esc(S.labelOf(stage)) + '</span>';
   }
 
+  function surnameFirst(name) {
+    var parts = name.trim().split(/\s+/);
+    if (parts.length < 2) return name;
+    return parts[parts.length - 1] + ', ' + parts.slice(0, -1).join(' ');
+  }
+
   function idcardHTML(r) {
     var initials = r.name.split(' ').map(function (w) { return w[0]; }).slice(0, 2).join('');
+    var issued = r.serial ? S.eventAt(r, 'ready') : null;
+    var issueDate = issued ? shortDate(issued.at) : '—';
+    var expiry = issued ? '31/10/' + (new Date(issued.at).getFullYear() + 3) : '—';
     return '' +
       '<figure class="idcard" data-state="' + cardState(r.stage) + '">' +
         '<div class="idcard__face">' +
-          '<div class="idcard__head">' +
+          '<div class="idcard__top">' +
             '<span class="idcard__crest" aria-hidden="true">UG</span>' +
-            '<span class="idcard__org"><b>University of Ghana</b><span>Student Identity Card</span></span>' +
+            '<span class="idcard__word">University<br>of Ghana</span>' +
+            '<span class="idcard__banner">Student ID Card</span>' +
           '</div>' +
           '<div class="idcard__body">' +
             '<div class="idcard__photo" aria-hidden="true">' + esc(initials) + '</div>' +
-            '<dl class="idcard__lines">' +
-              '<div><dt>Name</dt><dd>' + esc(r.name) + '</dd></div>' +
-              '<div><dt>Student number</dt><dd class="sm mono">' + esc(r.studentId) + ' · ' + esc(r.programme) + '</dd></div>' +
+            '<dl class="idcard__fields">' +
+              '<div><dt>Program</dt><dd>' + esc(r.programme) + '</dd></div>' +
+              '<div><dt>Campus</dt><dd>Main campus: full-time</dd></div>' +
+              '<div class="idcard__pair">' +
+                '<div><dt>Date of issue</dt><dd>' + issueDate + '</dd></div>' +
+                '<div><dt>Expiry date</dt><dd>' + expiry + '</dd></div>' +
+              '</div>' +
             '</dl>' +
           '</div>' +
           '<div class="idcard__foot">' +
-            '<span class="idcard__serial"><small>Card serial</small>' +
-              (r.serial ? esc(r.serial) : '▒▒▒▒ ▒▒▒▒ ▒▒▒▒') +
+            '<span class="idcard__line">' +
+              '<span class="idcard__no">' + esc(r.studentId) + '</span>' +
+              '<span class="idcard__name">' + esc(surnameFirst(r.name)) + '</span>' +
             '</span>' +
-            '<span class="idcard__seal" aria-hidden="true">UG</span>' +
+            '<span class="idcard__serial">Serial <b>' +
+              (r.serial ? esc(r.serial) : '▒▒▒▒ ▒▒▒▒ ▒▒▒▒') + '</b></span>' +
           '</div>' +
+          '<span class="idcard__seal" aria-hidden="true">UG</span>' +
         '</div>' +
       '</figure>';
   }
@@ -341,7 +361,14 @@
     $('bellCount').textContent = S.notifications().length;
 
     var action = '';
-    if (role === 'student') action = '<button class="btn" data-act="new">Request a replacement card</button>';
+    if (role === 'student') {
+      var open = S.openRequest();
+      /* no disabled button with no explanation: either offer the action or say why not */
+      action = open
+        ? '<p class="appbar__note">One replacement at a time. You can start another once ' +
+          '<span class="mono">' + esc(open.ref) + '</span> is collected.</p>'
+        : '<button class="btn" data-act="new">Request a replacement card</button>';
+    }
     if (role === 'officer') {
       var n = S.batch().length;
       action = '<button class="btn" data-act="print"' + (n ? '' : ' disabled') + '>Print batch (' + n + ')</button>';
@@ -354,7 +381,13 @@
   }
 
   /* ---------------- actions ---------------- */
-  function openDlg(id) { var d = $(id); if (d.showModal) d.showModal(); else d.setAttribute('open', ''); }
+  function openDlg(id) {
+    var d = $(id);
+    if (d.showModal) d.showModal(); else d.setAttribute('open', '');
+    /* land on the first thing to fill in, not on the close button */
+    var first = d.querySelector('[data-autofocus]');
+    if (first) first.focus();
+  }
   function closeDlg(d) { if (d.close) d.close(); else d.removeAttribute('open'); }
 
   document.addEventListener('click', function (e) {
@@ -436,6 +469,10 @@
     var file = $('doc').files[0];
     var channel = document.querySelector('input[name="channel"]:checked').value;
     var r = S.create({ reason: reason, docName: file ? file.name : null, channel: channel });
+    if (!r) {
+      toast('Not submitted', ' You already have a replacement in progress. Collect that card first.', 'stop');
+      return;
+    }
     render();
     toast('Request submitted', ' Your reference is ' + r.ref + '. Keep it — you can quote it at the counter.');
 

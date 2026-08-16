@@ -70,7 +70,7 @@
     <div class="sheet__body">
       <div class="field">
         <label for="reason">Reason for reissuance</label>
-        <select id="reason" required>
+        <select id="reason" data-autofocus required>
           <option value="">Choose a reason</option>
           <option value="lost">Lost card</option>
           <option value="stolen">Stolen card</option>
@@ -110,7 +110,7 @@
       <p style="font-size:14px;color:var(--ink-2);" id="rejectWho"></p>
       <div class="field">
         <label for="rejectReason">What the student must fix</label>
-        <textarea id="rejectReason" required placeholder="e.g. The police report is not legible. Upload a clear scan of the full page."></textarea>
+        <textarea id="rejectReason" data-autofocus required placeholder="e.g. The police report is not legible. Upload a clear scan of the full page."></textarea>
         <p class="hint">This text is sent to the student, so write it as an instruction.</p>
       </div>
     </div>
