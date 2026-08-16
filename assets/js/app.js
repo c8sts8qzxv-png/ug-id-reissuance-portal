@@ -222,10 +222,10 @@
     }
 
     var tiles = '<dl class="tiles">' +
-      '<div class="tile tile--wait"><dt>Waiting for review</dt><dd>' + q.length + '</dd></div>' +
-      '<div class="tile"><dt>Approved, not yet printed</dt><dd>' + m.backlog.print + '</dd></div>' +
-      '<div class="tile"><dt>Awaiting collection</dt><dd>' + m.backlog.ready + '</dd></div>' +
-      '<div class="tile tile--ok"><dt>Cards issued</dt><dd>' + m.issued + '</dd></div>' +
+      '<div class="tile tile--wait"><dt>Waiting for review</dt><dd data-count="' + q.length + '">0</dd></div>' +
+      '<div class="tile"><dt>Approved, not yet printed</dt><dd data-count="' + m.backlog.print + '">0</dd></div>' +
+      '<div class="tile"><dt>Awaiting collection</dt><dd data-count="' + m.backlog.ready + '">0</dd></div>' +
+      '<div class="tile tile--ok"><dt>Cards issued</dt><dd data-count="' + m.issued + '">0</dd></div>' +
     '</dl>';
 
     var qhtml = q.length ? '<div class="queue">' + q.map(function (r) {
@@ -294,13 +294,14 @@
     var max = Math.max(1, m.backlog.review, m.backlog.print, m.backlog.ready);
 
     var tiles = '<dl class="tiles">' +
-      '<div class="tile"><dt>Average turnaround</dt><dd>' + m.turnaroundDays.toFixed(1) +
+      '<div class="tile"><dt>Average turnaround</dt>' +
+        '<dd data-count="' + m.turnaroundDays.toFixed(1) + '" data-dp="1">0.0' +
         '<small>days, submission to ready · ' + m.sampleSize + ' completed requests</small></dd></div>' +
-      '<div class="tile tile--wait"><dt>Open requests</dt><dd>' + m.openTotal +
+      '<div class="tile tile--wait"><dt>Open requests</dt><dd data-count="' + m.openTotal + '">0' +
         '<small>across review, printing and collection</small></dd></div>' +
-      '<div class="tile tile--ok"><dt>Cards issued</dt><dd>' + m.issued +
+      '<div class="tile tile--ok"><dt>Cards issued</dt><dd data-count="' + m.issued + '">0' +
         '<small>printed and released</small></dd></div>' +
-      '<div class="tile"><dt>Fees processed</dt><dd>' + m.fees.toLocaleString() +
+      '<div class="tile"><dt>Fees processed</dt><dd data-count="' + m.fees + '">0' +
         '<small>GH₵, at GH₵ ' + S.FEE + '.00 per replacement</small></dd></div>' +
     '</dl>';
 
@@ -378,6 +379,32 @@
     view.innerHTML = role === 'student' ? studentView()
       : role === 'officer' ? officerView()
       : adminView();
+    countUp();
+  }
+
+  var STILL = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* figures count up so a change of number reads as a change, not a redraw */
+  function countUp() {
+    var cells = view.querySelectorAll('[data-count]');
+    Array.prototype.forEach.call(cells, function (el) {
+      var target = parseFloat(el.getAttribute('data-count')) || 0;
+      var dp = parseInt(el.getAttribute('data-dp') || '0', 10);
+      var small = el.querySelector('small');
+      var write = function (v) {
+        var txt = dp ? v.toFixed(dp) : Math.round(v).toLocaleString();
+        el.firstChild ? (el.firstChild.nodeValue = txt) : (el.textContent = txt);
+        if (small && el.firstChild !== small) { /* the caption stays put */ }
+      };
+      if (STILL || target === 0) { write(target); return; }
+      var t0 = performance.now(), DUR = 620;
+      (function step(now) {
+        var p = Math.min(1, (now - t0) / DUR);
+        var eased = 1 - Math.pow(1 - p, 3);
+        write(target * eased);
+        if (p < 1) requestAnimationFrame(step);
+      })(t0);
+    });
   }
 
   /* ---------------- actions ---------------- */

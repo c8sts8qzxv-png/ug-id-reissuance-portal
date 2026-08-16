@@ -2,9 +2,9 @@
 
 .mast__tools { display: flex; align-items: center; gap: 10px; }
 .mast__tools select {
-  background: #0A3245;
+  background: #10104A;
   color: #fff;
-  border: 1px solid #1D5A72;
+  border: 1px solid #3B3B9E;
   border-radius: var(--r-sm);
   padding: 7px 9px;
   font: 500 13px/1 var(--sans);
@@ -13,14 +13,14 @@
 .bell {
   position: relative;
   display: inline-flex; align-items: center; gap: 7px;
-  background: transparent; color: #DCEAF0;
-  border: 1px solid #1D5A72; border-radius: var(--r-sm);
+  background: transparent; color: #DDDDF5;
+  border: 1px solid #3B3B9E; border-radius: var(--r-sm);
   padding: 7px 10px; font: 500 13px/1 var(--sans); cursor: pointer;
 }
-.bell:hover { background: #0A3245; color: #fff; }
+.bell:hover { background: #10104A; color: #fff; }
 .bell b {
   font: 500 11px/1 var(--mono);
-  background: var(--gold); color: #2A1D05;
+  background: var(--lemon); color: var(--legon);
   border-radius: 999px; padding: 3px 6px;
 }
 
@@ -44,7 +44,7 @@
   display: grid; place-items: center;
   background: var(--legon-wash); color: var(--legon);
   font: 600 15px/1 var(--cond);
-  border: 1px solid #BFD8E1;
+  border: 1px solid #C3C4E8;
 }
 
 main.app { padding: 24px 0 60px; }
@@ -64,7 +64,7 @@ main.app { padding: 24px 0 60px; }
   display: inline-flex; align-items: baseline; gap: 8px;
   font-family: var(--mono); font-size: 13px;
   background: var(--legon-wash); color: var(--legon);
-  border: 1px solid #BFD8E1; border-radius: var(--r-sm);
+  border: 1px solid #C3C4E8; border-radius: var(--r-sm);
   padding: 5px 9px;
 }
 .refchip small { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
@@ -92,10 +92,11 @@ main.app { padding: 24px 0 60px; }
 .step__who { display: block; font-size: 12.5px; color: var(--ink-3); }
 .step__when { font-family: var(--mono); font-size: 12px; color: var(--ink-3); text-align: right; white-space: nowrap; }
 
-.step[data-s="done"] .step__mark { border-color: var(--ok); background: var(--ok); color: #fff; }
+.step[data-s="done"] .step__mark { border-color: var(--legon); background: var(--lemon); color: var(--legon); }
 .step[data-s="now"] .step__mark {
   border-color: var(--legon); color: var(--legon);
   box-shadow: 0 0 0 4px var(--legon-wash);
+  animation: pulse-now 2.4s ease-in-out infinite;
 }
 .step[data-s="now"] .step__name { color: var(--legon); }
 .step[data-s="todo"] .step__name { color: var(--ink-3); font-weight: 600; }
@@ -106,7 +107,7 @@ main.app { padding: 24px 0 60px; }
   padding: 14px 16px;
   border-radius: var(--r-md);
   background: var(--legon-wash);
-  border: 1px solid #BFD8E1;
+  border: 1px solid #C3C4E8;
 }
 .next.next--stop { background: var(--stop-wash); border-color: #E3BEBD; }
 .next .eyebrow { margin-bottom: 5px; }
@@ -134,13 +135,19 @@ main.app { padding: 24px 0 60px; }
 }
 .tbl td { padding: 12px 16px; border-bottom: 1px solid var(--rule-soft); vertical-align: middle; }
 .tbl tbody tr:last-child td { border-bottom: 0; }
-.tbl tbody tr:hover { background: #FAFCFD; }
+.tbl tbody tr:hover { background: #FAFAFE; }
 .tbl .num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
 .scroll-x { overflow-x: auto; }
 
 /* ---------- officer ---------- */
 .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-.tile { padding: 15px 17px; background: var(--surface); border: 1px solid var(--rule-soft); border-radius: var(--r-lg); }
+.tile {
+  padding: 15px 17px; background: var(--surface);
+  border: 1px solid var(--rule-soft); border-top: 4px solid var(--legon);
+  border-radius: var(--r-lg);
+}
+.tile--wait { border-top-color: var(--gold); }
+.tile--ok { border-top-color: var(--lemon); }
 .tile dt {
   font: 500 10.5px/1.4 var(--mono);
   letter-spacing: .13em; text-transform: uppercase; color: var(--ink-3);
@@ -172,11 +179,11 @@ main.app { padding: 24px 0 60px; }
 }
 .qrow:last-child { border-bottom: 0; }
 @media (hover: hover) and (pointer: fine) {
-  .qrow:hover { background: #F7FBFC; }
+  .qrow:hover { background: #F8F8FD; }
   .doc:hover { border-color: var(--legon); }
 }
 .qrow:active { background: var(--legon-wash); }
-.qrow[aria-current="true"] { background: var(--legon-wash); border-left-color: var(--legon); }
+.qrow[aria-current="true"] { background: var(--legon-wash); border-left-color: var(--lemon); }
 .qrow__name { display: block; font-family: var(--cond); font-weight: 600; font-size: 15px; }
 .qrow__meta { display: block; font-size: 12.5px; color: var(--ink-3); }
 .qrow__ref { display: block; font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); }
@@ -281,4 +288,44 @@ main.app { padding: 24px 0 60px; }
   .facts { grid-template-columns: 1fr; }
   .log li { grid-template-columns: 1fr; gap: 4px; }
   .bar { grid-template-columns: 110px minmax(0, 1fr) 30px; }
+}
+
+/* ---------- portal motion ---------- */
+@keyframes pulse-now {
+  0%, 100% { box-shadow: 0 0 0 4px var(--legon-wash); }
+  50%      { box-shadow: 0 0 0 7px rgba(25, 25, 112, .10); }
+}
+
+/* each rendered view arrives rather than snapping in */
+#view > * {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: view-in 420ms var(--ease-out) forwards;
+}
+#view > *:nth-child(2) { animation-delay: 60ms; }
+#view > *:nth-child(3) { animation-delay: 120ms; }
+#view > *:nth-child(4) { animation-delay: 180ms; }
+#view > *:nth-child(5) { animation-delay: 240ms; }
+@keyframes view-in { to { opacity: 1; transform: none; } }
+
+/* the stage a request has just reached lands with a little weight */
+.step__mark { will-change: transform; }
+.step[data-s="done"] .step__mark,
+.step[data-s="stop"] .step__mark { animation: mark-in 460ms var(--spring); }
+@keyframes mark-in {
+  0%   { transform: scale(.6); }
+  100% { transform: scale(1); }
+}
+
+/* the queue fills in from the top */
+.qrow { animation: row-in 340ms var(--ease-out) both; }
+.qrow:nth-child(2) { animation-delay: 45ms; }
+.qrow:nth-child(3) { animation-delay: 90ms; }
+.qrow:nth-child(4) { animation-delay: 135ms; }
+.qrow:nth-child(5) { animation-delay: 180ms; }
+@keyframes row-in { from { opacity: 0; transform: translateX(-8px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  #view > *, .qrow { opacity: 1; transform: none; animation: none; }
+  .step[data-s="now"] .step__mark { animation: none; }
 }

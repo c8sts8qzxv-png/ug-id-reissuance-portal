@@ -8,9 +8,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/base.css">
-<link rel="stylesheet" href="assets/css/home.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230C3B4E'/><text x='16' y='22' font-family='sans-serif' font-size='15' font-weight='700' fill='%23E3B75C' text-anchor='middle'>UG</text></svg>">
+<link rel="stylesheet" href="assets/css/base.css?v=4">
+<link rel="stylesheet" href="assets/css/home.css?v=4">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23191970'/><text x='16' y='22' font-family='sans-serif' font-size='15' font-weight='700' fill='%23FFF200' text-anchor='middle'>UG</text></svg>">
 </head>
 <body>
 
@@ -29,16 +29,16 @@
 
 <main>
 
-  <!-- HERO: the card you are waiting for, drawn as it currently exists -->
-  <section class="hero">
+  <!-- HERO: the card is made in front of you, and every stage messages you -->
+  <section class="hero" id="hero">
     <div class="wrap hero__grid">
       <div>
         <p class="eyebrow">Academic Affairs Directorate · ID Card Unit · Legon</p>
-        <h1>Know where your <em>ID card</em> is.</h1>
+        <h1>Know where your <em><span>ID card</span></em> is.</h1>
         <p class="hero__lede">
-          Report a lost, stolen or damaged card, pay the reissuance fee and upload your
-          police report in one sitting. You get a reference number immediately and a
-          message at every stage — so you never have to walk to the office to ask.
+          Report a lost, stolen or damaged card and follow the request through every
+          stage. You are told the moment anything changes — so you never walk to the
+          office to ask.
         </p>
 
         <nav class="doors" aria-labelledby="doors-label">
@@ -72,7 +72,9 @@
         </nav>
       </div>
 
-      <div class="hero__art">
+      <div class="hero__scene">
+        <div class="hero__cardwrap">
+        <div class="hero__head" aria-hidden="true"></div>
         <figure class="idcard" id="heroCard" data-state="blueprint">
           <div class="idcard__face">
             <div class="idcard__top">
@@ -113,13 +115,19 @@
             <span class="idcard__seal" aria-hidden="true">UG</span>
           </div>
         </figure>
-        <p class="hero__caption" id="heroCaption">Stage 1 of 5 — <b>request submitted</b></p>
+        </div>
+        <div class="hero__notes" id="heroNotes" aria-hidden="true">
+          <div class="note-chip"><b>Submitted</b>Reference UG-ID-2026-089 issued.</div>
+          <div class="note-chip"><b>Payment verified</b>GH₵ 50.00 confirmed by the payment platform.</div>
+          <div class="note-chip"><b>Approved</b>Your card is in the print batch.</div>
+          <div class="note-chip note-chip--lit"><b>Ready for collection</b>Collect at the ID Card Unit, Mon–Fri 09:00–16:00.</div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- THE FIVE STAGES -->
-  <section class="stages">
+  <section class="stages" id="stages">
     <div class="wrap">
       <div class="stages__head">
         <p class="eyebrow">How a replacement is processed</p>
@@ -175,7 +183,7 @@
   </section>
 
   <!-- WHAT CHANGES -->
-  <section class="split">
+  <section class="split" id="split">
     <div class="wrap split__grid">
       <div class="compare compare--old">
         <p class="eyebrow">The counter process</p>
@@ -205,10 +213,10 @@
   </section>
 
   <!-- WHAT YOU NEED -->
-  <section class="needs">
+  <section class="needs" id="needs">
     <div class="wrap">
       <p class="eyebrow">Before you start</p>
-      <h2 style="font-size:clamp(24px,3.4vw,32px);margin-top:10px;">What you need to have ready.</h2>
+      <h2>What you need to have ready.</h2>
       <div class="needs__grid">
         <article class="need">
           <p class="eyebrow">Document</p>
@@ -218,7 +226,7 @@
             the counter when you collect the new one. PDF, PNG or JPG up to 5 MB.
           </p>
         </article>
-        <article class="need">
+        <article class="need need--fee">
           <p class="eyebrow">Fee</p>
           <p class="fee">GH₵ 50.00</p>
           <h3 style="margin-top:8px;">Paid by mobile money or bank card</h3>
@@ -249,6 +257,6 @@
   </div>
 </footer>
 
-<script src="assets/js/home.js"></script>
+<script src="assets/js/home.js?v=4"></script>
 </body>
 </html>

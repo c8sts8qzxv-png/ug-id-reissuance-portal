@@ -2,36 +2,44 @@
    Shared tokens, resets, typography and the ID-card artifact. */
 
 :root {
-  /* Ground: the cool sheen of a laminated card, not paper white */
-  --paper:        #E6EBEE;
-  --paper-deep:   #D5DDE2;
+  /* University of Ghana: Midnight Blue, Lemon Yellow, Vegas Gold.
+     Blue carries the structure, lemon marks what has happened,
+     gold is reserved for the card and its seal. */
+  --paper:        #EFF0F7;
+  --paper-deep:   #DFE1EE;
   --surface:      #FFFFFF;
-  --surface-sunk: #F3F6F8;
+  --surface-sunk: #F5F6FB;
 
-  --ink:          #0E1A21;
-  --ink-2:        #3B4D57;
-  --ink-3:        #5A6C77;   /* 4.9:1 on white — safe for small secondary text */
-  --rule:         #CBD6DC;
-  --rule-soft:    #E1E8EC;
+  --ink:          #0B0B23;
+  --ink-2:        #3A3A56;
+  --ink-3:        #5A5A76;   /* 5.3:1 on white — safe for small secondary text */
+  --rule:         #C9CCE2;
+  --rule-soft:    #E4E6F1;
 
-  --legon:        #0C3B4E;   /* primary — deep petrol blue */
-  --legon-lift:   #145369;
-  --legon-wash:   #E4EEF2;
+  --legon:        #191970;   /* Midnight Blue — primary */
+  --legon-lift:   #2E2E93;
+  --legon-deep:   #0E0E45;
+  --legon-wash:   #EAEAF7;
 
-  --gold:         #B8862B;   /* foil. used only on the card and the seal */
-  --gold-lift:    #E3B75C;
-  --gold-text:    #7E5A12;   /* 5.2:1 on white — the gold that is safe to read */
+  --lemon:        #FFF200;   /* Lemon Yellow — fills and highlights, never text on light */
+  --lemon-deep:   #E3D400;
+  --lemon-wash:   #FFFBCC;
+
+  --gold:         #C5B358;   /* Vegas Gold — the card, the seal, the rules */
+  --gold-lift:    #E4D68A;
+  --gold-text:    #7C6D22;   /* 5.4:1 on white — the gold that is safe to read */
 
   /* the built-in curves are too weak to feel deliberate */
   --ease-out:     cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out:  cubic-bezier(0.77, 0, 0.175, 1);
+  --spring:       cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  --wait:         #A2660A;
-  --wait-wash:    #FBF0DC;
-  --ok:           #0B6A50;
-  --ok-wash:      #DFF0EA;
-  --stop:         #97282A;
-  --stop-wash:    #FAE5E4;
+  --wait:         #9A6100;
+  --wait-wash:    #FDF1D8;
+  --ok:           #0F7A4A;
+  --ok-wash:      #DCF2E6;
+  --stop:         #A11B2B;
+  --stop-wash:    #FBE4E6;
 
   --sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --cond: "IBM Plex Sans Condensed", "IBM Plex Sans", -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -41,9 +49,9 @@
   --r-md: 8px;
   --r-lg: 12px;
 
-  --shadow-1: 0 1px 2px rgba(14, 26, 33, .06), 0 1px 1px rgba(14, 26, 33, .04);
-  --shadow-2: 0 2px 4px rgba(14, 26, 33, .05), 0 12px 28px -16px rgba(12, 59, 78, .35);
-  --shadow-3: 0 24px 60px -24px rgba(12, 59, 78, .45);
+  --shadow-1: 0 1px 2px rgba(11, 11, 35, .06), 0 1px 1px rgba(11, 11, 35, .04);
+  --shadow-2: 0 2px 4px rgba(11, 11, 35, .05), 0 12px 28px -16px rgba(25, 25, 112, .35);
+  --shadow-3: 0 24px 60px -24px rgba(25, 25, 112, .45);
 
   --wrap: 1140px;
 }
@@ -175,7 +183,7 @@ a:hover { color: var(--legon-lift); }
   z-index: 40;
   background: var(--legon);
   color: #fff;
-  border-bottom: 3px solid var(--gold);
+  border-bottom: 4px solid var(--gold);
 }
 .mast__in {
   display: flex;
@@ -190,7 +198,7 @@ a:hover { color: var(--legon-lift); }
 .mast__sub {
   display: block;
   font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em;
-  text-transform: uppercase; color: #9FC2CE;
+  text-transform: uppercase; color: #A9AADF;
 }
 
 /* university monogram */
@@ -203,7 +211,7 @@ a:hover { color: var(--legon-lift); }
   clip-path: polygon(0 0, 100% 0, 100% 68%, 50% 100%, 0 68%);
   font: 700 14px/1 var(--cond);
   letter-spacing: .04em;
-  color: #2A1D05;
+  color: #2A2408;
 }
 
 /* ---------- THE SIGNATURE: the card being minted ----------
@@ -229,7 +237,7 @@ a:hover { color: var(--legon-lift); }
   border-radius: inherit;
   overflow: hidden;
   background:
-    linear-gradient(150deg, #F7FAFC 0%, #E9F1F5 48%, #DCE8EE 100%);
+    linear-gradient(150deg, #FBFCFF 0%, #E8EAF6 55%, #DDE0F0 100%);
   border: 1px solid var(--rule);
   box-shadow: var(--shadow-2);
   transition: opacity 400ms var(--ease-out), filter 400ms var(--ease-out);
@@ -241,9 +249,9 @@ a:hover { color: var(--legon-lift); }
   inset: -40%;
   background:
     repeating-radial-gradient(ellipse 62% 30% at 18% 62%,
-      transparent 0 6px, rgba(24, 74, 128, .16) 6px 6.7px),
+      transparent 0 6px, rgba(25, 25, 112, .16) 6px 6.7px),
     repeating-radial-gradient(ellipse 70% 26% at 86% 30%,
-      transparent 0 8px, rgba(24, 74, 128, .11) 8px 8.8px);
+      transparent 0 8px, rgba(25, 25, 112, .11) 8px 8.8px);
   opacity: .55;
   pointer-events: none;
 }
@@ -257,20 +265,20 @@ a:hover { color: var(--legon-lift); }
   background: linear-gradient(160deg, var(--gold-lift), var(--gold));
   clip-path: polygon(0 0, 100% 0, 100% 66%, 50% 100%, 0 66%);
   display: grid; place-items: center;
-  font: 700 3cqw/1 var(--cond); color: #2A1D05;
+  font: 700 3cqw/1 var(--cond); color: #2A2408;
 }
 .idcard__word {
   font: 700 4.6cqw/1.02 var(--cond);
   letter-spacing: .005em;
-  color: #16222B;
+  color: var(--legon);
   text-transform: uppercase;
   margin-top: .2cqw;
 }
 .idcard__banner {
   margin-left: auto;
   padding: 1cqw 2.4cqw;
-  background: linear-gradient(100deg, #8E6415, #D8B15E 45%, #9C7020);
-  color: #FFF8E6;
+  background: linear-gradient(100deg, #8A7A2E, #DFCE7C 45%, #9C8C34);
+  color: #FFFDF0;
   font: 700 2.9cqw/1.25 var(--cond);
   letter-spacing: .06em;
   text-transform: uppercase;
@@ -282,22 +290,22 @@ a:hover { color: var(--legon-lift); }
 .idcard__photo {
   aspect-ratio: 3 / 4;
   border-radius: 1px;
-  background: linear-gradient(170deg, #BACBD4, #93AAB6);
+  background: linear-gradient(170deg, #C3C6DE, #9A9EC0);
   display: grid; place-items: center;
   font: 600 5.4cqw/1 var(--cond);
   color: rgba(255, 255, 255, .94);
-  border: 1px solid rgba(12, 59, 78, .22);
+  border: 1px solid rgba(25, 25, 112, .22);
 }
 .idcard__fields { display: grid; gap: 1.4cqw; min-width: 0; margin: 0; }
 .idcard__fields dt {
   font: 500 2.2cqw/1 var(--mono);
-  letter-spacing: .1em; text-transform: uppercase; color: #566A76;
+  letter-spacing: .1em; text-transform: uppercase; color: #5C5C7E;
 }
 .idcard__fields dd {
   margin: .5cqw 0 0;
   font: 600 3.1cqw/1.12 var(--cond);
   text-transform: uppercase;
-  color: #16222B;
+  color: var(--legon);
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .idcard__pair { display: grid; grid-template-columns: 1fr 1fr; gap: 3%; }
@@ -312,18 +320,18 @@ a:hover { color: var(--legon-lift); }
 .idcard__no {
   font: 700 4cqw/1 var(--cond);
   letter-spacing: .02em;
-  color: #16222B;
+  color: var(--legon);
 }
 .idcard__name {
   font: 700 3.8cqw/1 var(--cond);
   text-transform: uppercase;
-  color: #16222B;
+  color: var(--legon);
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .idcard__serial {
   font: 500 2.3cqw/1 var(--mono);
   letter-spacing: .2em;
-  color: #46606E;
+  color: #4A4A6B;
 }
 .idcard__serial b { font-weight: 500; color: var(--legon); }
 
@@ -336,12 +344,12 @@ a:hover { color: var(--legon-lift); }
   display: grid; place-items: center;
   background:
     radial-gradient(circle at 34% 28%, rgba(255, 255, 255, .5), transparent 58%),
-    conic-gradient(from 210deg, #A87B25, #E7C36E 18%, #9C6F1E 36%, #F0D68F 54%,
-                   #A87B25 72%, #E0BB63 88%, #A87B25 100%);
-  color: #3A2807;
+    conic-gradient(from 210deg, #A2913C, #E8DA9A 18%, #8E7E2A 36%, #F2E7B4 54%,
+                   #A2913C 72%, #DACB80 88%, #A2913C 100%);
+  color: #332C08;
   font: 700 2.8cqw/1 var(--cond);
   letter-spacing: .04em;
-  box-shadow: inset 0 0 0 .7cqw rgba(255, 255, 255, .34), 0 1px 3px rgba(58, 40, 7, .4);
+  box-shadow: inset 0 0 0 .7cqw rgba(255, 255, 255, .34), 0 1px 3px rgba(51, 44, 8, .45);
   opacity: 0;
   transform: scale(.92) rotate(-14deg);
   transition: opacity 260ms var(--ease-out), transform 320ms var(--ease-out);
@@ -349,25 +357,25 @@ a:hover { color: var(--legon-lift); }
 
 /* --- state: not yet printed. a blueprint of the card that will exist --- */
 .idcard[data-state="blueprint"] .idcard__face {
-  background: repeating-linear-gradient(115deg, #EEF3F6 0 9px, #E8EEF2 9px 18px);
+  background: repeating-linear-gradient(115deg, #EDEEF8 0 9px, #E6E8F4 9px 18px);
   border-style: dashed;
-  border-color: #A9BEC8;
+  border-color: #A9ADCB;
   box-shadow: none;
 }
 .idcard[data-state="blueprint"] .idcard__face::before { opacity: .16; }
 .idcard[data-state="blueprint"] .idcard__photo {
   background: transparent;
-  border: 1px dashed #A9BEC8;
+  border: 1px dashed #A9ADCB;
   color: transparent;
 }
 .idcard[data-state="blueprint"] .idcard__word,
 .idcard[data-state="blueprint"] .idcard__fields dd,
 .idcard[data-state="blueprint"] .idcard__no,
-.idcard[data-state="blueprint"] .idcard__name { color: #8CA4B0; }
+.idcard[data-state="blueprint"] .idcard__name { color: #9598BC; }
 .idcard[data-state="blueprint"] .idcard__banner {
   background: none;
-  border: 1px dashed #A9BEC8;
-  color: #8CA4B0;
+  border: 1px dashed #A9ADCB;
+  color: #9598BC;
 }
 .idcard[data-state="blueprint"] .idcard__crest { filter: grayscale(1); opacity: .45; }
 
@@ -393,8 +401,8 @@ a:hover { color: var(--legon-lift); }
   transform: translate(-50%, -50%) rotate(-11deg);
   font: 700 clamp(18px, 6.5cqw, 38px)/1 var(--cond);
   letter-spacing: .12em;
-  color: rgba(151, 40, 42, .72);
-  border: 3px solid rgba(151, 40, 42, .55);
+  color: rgba(161, 27, 43, .72);
+  border: 3px solid rgba(161, 27, 43, .55);
   border-radius: 4px;
   padding: 6px 16px;
 }
@@ -461,7 +469,7 @@ dialog.sheet:not([open]) { opacity: 0; transform: scale(.96); }
   dialog.sheet[open] { opacity: 0; transform: scale(.96); }
 }
 dialog.sheet::backdrop {
-  background: rgba(9, 32, 42, .55);
+  background: rgba(11, 11, 35, .55);
   opacity: 1;
   transition: opacity 200ms ease, overlay 200ms allow-discrete, display 200ms allow-discrete;
 }

@@ -149,6 +149,24 @@ progress of the request is legible before you read a single word.
 
 Typography is the IBM Plex superfamily in three roles: Sans Condensed for headings,
 Sans for interface text, and Mono for anything that behaves like a serial number —
-references, receipts, timestamps and card serials. The palette is drawn from a
-laminated card rather than a corporate dashboard: cool grey-blue ground, deep petrol
-blue ink, and gold used only on the card itself.
+references, receipts, timestamps and card serials.
+
+The palette is the University's own three colours, each given one job:
+
+| Colour | Value | Used for |
+| --- | --- | --- |
+| Midnight Blue | `#191970` | Structure — masthead, hero and section fields, primary actions |
+| Lemon Yellow | `#FFF200` | What has already happened — completed stages, the highlight, the "ready" message |
+| Vegas Gold | `#C5B358` | The card and its seal, and the rule under the masthead |
+
+The colour names are the University's; the hex values are the standard values for those
+names, adjusted only where screen legibility demanded it. Lemon yellow is about 1.1:1
+against white, so it never carries text on a light background — where text sits on lemon
+it is midnight blue, which is about 13:1.
+
+Motion is used where it explains something. The hero mints the card and delivers its four
+messages in one run, because that sequence *is* the argument the project makes. The stage
+rail fills and lights its stations as it scrolls into view. In the portal motion is kept
+short: figures count up so a change reads as a change, the queue fills from the top, and a
+stage mark lands with a little weight when a request reaches it. All of it is disabled
+under `prefers-reduced-motion`.
