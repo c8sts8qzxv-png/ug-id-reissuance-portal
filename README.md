@@ -35,6 +35,11 @@ first thing anyone sees.
 | **ID Card Officer** | Work an oldest-first queue, open a request, approve it or return it with a written reason, print a batch (which assigns card serials and produces a printable batch list), record collection at the counter |
 | **Administrator** | Average turnaround computed from real timestamps, backlog by stage, cards issued, fees processed, full audit trail of who did what and when, user accounts |
 
+The officer desk is built for repeat use: filter the queue by name, student number or
+reference, and work it from the keyboard — <kbd>J</kbd> and <kbd>K</kbd> to move,
+<kbd>A</kbd> to approve, <kbd>R</kbd> to return with a reason. Students can copy their
+reference number with one press.
+
 The three roles share one data store, so the workflow is genuinely connected: approve a
 request as the officer, switch to the student, and the card has moved on.
 

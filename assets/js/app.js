@@ -7,6 +7,7 @@
   var view = document.getElementById('view');
   var role = 'student';
   var picked = null;   // ref selected in the officer queue
+  var qFilter = '';    // live filter over the queue
 
   /* ---------------- helpers ---------------- */
   function esc(s) {
@@ -174,7 +175,9 @@
         '<div class="panel">' +
           '<div class="panel__head">' +
             '<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">' +
-              '<span class="refchip"><small>Ref</small>' + esc(r.ref) + '</span>' + pillFor(r.stage) +
+              '<span class="refchip"><small>Ref</small>' + esc(r.ref) +
+                '<button class="copy" data-copy="' + esc(r.ref) + '" ' +
+                'aria-label="Copy reference number">Copy</button></span>' + pillFor(r.stage) +
             '</div>' +
             '<span class="mono" style="font-size:12px;color:var(--ink-3)">opened ' + ago(r.events[0].at) + '</span>' +
           '</div>' +
@@ -281,8 +284,15 @@
     return tiles +
       '<div class="desk">' +
         '<div class="panel" style="overflow:hidden">' +
-          '<div class="panel__head"><h2>Requests waiting for a decision</h2>' +
-          '<span class="mono" style="font-size:12px;color:var(--ink-3)">oldest first</span></div>' +
+          '<div class="panel__head">' +
+            '<h2>Requests waiting for a decision</h2>' +
+            '<input type="text" id="qSearch" class="qsearch" placeholder="Filter by name, ID or reference"' +
+              ' value="' + esc(qFilter) + '" aria-label="Filter the queue">' +
+          '</div>' +
+          '<p class="keys">' +
+            '<kbd>J</kbd><kbd>K</kbd> move · <kbd>A</kbd> approve · <kbd>R</kbd> return' +
+            '<span id="qCount"></span>' +
+          '</p>' +
           qhtml +
         '</div>' + detail +
       '</div>' + readyPanel;
@@ -354,7 +364,7 @@
     admin: { title: 'Reports and administration', sub: 'System Administrator · UG Computing Systems', initials: 'SA' }
   };
 
-  function render() {
+  function render(quiet) {
     var head = HEADS[role];
     $('viewTitle').textContent = head.title;
     $('viewSub').textContent = head.sub;
@@ -376,16 +386,22 @@
     }
     $('appbarAction').innerHTML = action;
 
+    view.classList.toggle('no-anim', !!quiet);
     view.innerHTML = role === 'student' ? studentView()
       : role === 'officer' ? officerView()
       : adminView();
-    countUp();
+    countUp(quiet);        /* quiet still writes the figures — it just skips the roll-up */
+    if (role === 'officer') applyFilter();
   }
+
+  /* keyboard-driven moves re-render without the entrance animation:
+     an officer presses J and K all day and must not wait for motion */
+  function renderQuiet() { render(true); }
 
   var STILL = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* figures count up so a change of number reads as a change, not a redraw */
-  function countUp() {
+  function countUp(instant) {
     var cells = view.querySelectorAll('[data-count]');
     Array.prototype.forEach.call(cells, function (el) {
       var target = parseFloat(el.getAttribute('data-count')) || 0;
@@ -396,7 +412,7 @@
         el.firstChild ? (el.firstChild.nodeValue = txt) : (el.textContent = txt);
         if (small && el.firstChild !== small) { /* the caption stays put */ }
       };
-      if (STILL || target === 0) { write(target); return; }
+      if (STILL || instant || target === 0) { write(target); return; }
       var t0 = performance.now(), DUR = 620;
       (function step(now) {
         var p = Math.min(1, (now - t0) / DUR);
@@ -542,6 +558,81 @@
       ' moved to “ready for collection” and every student was messaged.', 'ok');
     setTimeout(function () { window.print(); }, 400);
   }
+
+  /* ---------- filtering the queue ---------- */
+  function applyFilter() {
+    var rows = view.querySelectorAll('.qrow');
+    var q = qFilter.trim().toLowerCase();
+    var shown = 0;
+    Array.prototype.forEach.call(rows, function (row) {
+      var hit = !q || row.textContent.toLowerCase().indexOf(q) !== -1;
+      row.hidden = !hit;
+      if (hit) shown += 1;
+    });
+    var count = $('qCount');
+    if (count) {
+      count.textContent = q ? '  ·  ' + shown + ' of ' + rows.length + ' shown' : '';
+    }
+  }
+
+  view.addEventListener('input', function (e) {
+    if (e.target.id !== 'qSearch') return;
+    qFilter = e.target.value;
+    applyFilter();          /* filter in place: no re-render, no lost caret */
+  });
+
+  /* ---------- copy the reference ---------- */
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-copy]');
+    if (!b) return;
+    var text = b.getAttribute('data-copy');
+    var done = function () {
+      b.classList.add('is-done');
+      b.textContent = 'Copied';
+      setTimeout(function () { b.classList.remove('is-done'); b.textContent = 'Copy'; }, 1600);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () {
+        toast('Could not copy', ' Select the reference and copy it manually.', 'stop');
+      });
+    } else { done(); }
+  });
+
+  /* ---------- officer keyboard shortcuts ---------- */
+  document.addEventListener('keydown', function (e) {
+    if (role !== 'officer') return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT')) return;
+    if (document.querySelector('dialog[open]')) return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+    var list = S.queue().filter(function (r) {
+      if (!qFilter.trim()) return true;
+      var hay = (r.name + ' ' + r.studentId + ' ' + r.ref).toLowerCase();
+      return hay.indexOf(qFilter.trim().toLowerCase()) !== -1;
+    });
+    if (!list.length) return;
+    var at = Math.max(0, list.map(function (r) { return r.ref; }).indexOf(picked));
+    var key = e.key.toLowerCase();
+
+    if (key === 'j' || key === 'k') {
+      e.preventDefault();
+      picked = list[(at + (key === 'j' ? 1 : list.length - 1)) % list.length].ref;
+      renderQuiet();
+    } else if (key === 'a') {
+      e.preventDefault();
+      var ok = S.approve(picked, OFFICER);
+      if (ok) { toast('Approved', ' ' + ok.ref + ' is in the print batch.', 'ok'); picked = null; render(); }
+    } else if (key === 'r') {
+      e.preventDefault();
+      var r = S.byRef(picked);
+      if (!r) return;
+      $('rejectForm').dataset.ref = r.ref;
+      $('rejectWho').textContent = r.name + ' · ' + r.ref + ' · ' + S.REASONS[r.reason];
+      $('rejectReason').value = '';
+      openDlg('rejectDlg');
+    }
+  });
 
   /* role */
   function setRole(next) {

@@ -299,3 +299,21 @@
   .rail::after { transform: scaleX(1); }
   .reveal, .compare, .need { opacity: 1; transform: none; }
 }
+
+/* headline words arrive one after another */
+.hero h1.is-split .word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(18px);
+  animation: word-in 620ms var(--ease-out) forwards;
+}
+@keyframes word-in { to { opacity: 1; transform: none; } }
+
+/* the card leans towards the pointer */
+.hero__cardwrap { will-change: transform; }
+.hero__cardwrap .idcard { transition: transform 420ms var(--ease-out); }
+.hero__cardwrap:hover .idcard { transition: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero h1.is-split .word { opacity: 1; transform: none; animation: none; }
+}
